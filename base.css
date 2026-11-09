@@ -1,0 +1,403 @@
+/* ==========================================================================
+   IDENTIDADE SES-MG / AEST — folha de base para HTML avulso e offline
+   --------------------------------------------------------------------------
+   Traducao da identidade do Sistema de Governanca (que roda em Tailwind) para
+   CSS escrito a mao, para que um documento HTML de arquivo unico funcione sem
+   internet. Cole esta folha inteira dentro de um <style>, depois do bloco da
+   fonte Inter.
+
+   Nada aqui depende de CDN, de build ou de arquivo externo.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+    /* Institucionais. Verde = o sistema. Azul = eixo SUS. Laranja = eixo SES. */
+    --ses-green:       #8dc63f;
+    --ses-lightgreen:  #b2d235;
+    --ses-green-deep:  #4f7a24;   /* fim do gradiente do hero de tela */
+    --ses-green-mid:   #69a52c;   /* fim do gradiente do hero de home */
+    --ses-blue:        #007fb6;
+    --ses-darkblue:    #005b8e;
+    --ses-lightblue:   #5ab0d8;
+    --ses-orange:      #f58220;
+    --ses-darkorange:  #d96c14;
+    --ses-yellow:      #fdb913;
+
+    /* Neutros */
+    --bg:            #f4f7f9;
+    --surface:       #ffffff;
+    --border-soft:   #f1f5f9;   /* borda interna, suave */
+    --border:        #e2e8f0;   /* borda de card, divisor */
+    --field:         #f8fafc;   /* fundo de campo e caixa interna */
+
+    /* Texto */
+    --t-800: #1e293b;   /* titulo */
+    --t-700: #334155;   /* corpo forte */
+    --t-600: #475569;   /* corpo */
+    --t-500: #64748b;   /* secundario */
+    --t-400: #94a3b8;   /* rotulo, eyebrow */
+    --t-300: #cbd5e1;   /* vazio */
+
+    /* Semaforo de situacao */
+    --st-concluido:  var(--ses-green);
+    --st-atraso:     #ef4444;
+    --st-aguardando: #fbbf24;
+    --st-andamento:  #60a5fa;
+    --st-nao-inic:   #cbd5e1;
+
+    /* Raios — crescem com o bloco */
+    --r-full:  9999px;
+    --r-lg:    0.5rem;
+    --r-xl:    0.75rem;
+    --r-2xl:   1rem;      /* input, botao, chip, tile de icone */
+    --r-3xl:   1.5rem;    /* caixa de conteudo */
+    --r-card:  28px;      /* card de lista e barra de filtros — o raio "de tela" */
+    --r-modal: 32px;
+    --r-panel: 40px;      /* painel grande, cabecalho de secao */
+
+    /* Sombras */
+    --sh-sm:    0 1px 2px 0 rgba(0,0,0,.05);
+    --sh-md:    0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+    --sh-lg:    0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+    --sh-2xl:   0 25px 50px -12px rgba(0,0,0,.25);
+    --sh-inner: inset 0 2px 4px 0 rgba(0,0,0,.05);
+    --sh-craft: 0 20px 50px -12px rgba(0,0,0,.1);
+
+    /* Onda institucional. Trocar esta data-URI pela silhueta oficial do
+       index.html quando ela estiver a mao; e o unico ponto de ajuste. */
+    --ses-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,96 C240,160 420,32 720,80 C1020,128 1200,192 1440,128 L1440,220 L0,220 Z'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   2. BASE E TIPOGRAFIA
+   font-black domina: titulo, rotulo e botao sao todos 900.
+   -------------------------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--t-600);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.625;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 900; letter-spacing: -0.025em; color: var(--t-800); }
+p  { margin: 0 0 0.75rem; }
+p:last-child { margin-bottom: 0; }
+a  { color: var(--ses-darkblue); text-decoration: none; font-weight: 700; }
+a:hover { text-decoration: underline; }
+
+/* Papeis tipograficos */
+.ses-titulo-tela    { font-size: 2.25rem;  line-height: 1.1; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.1); font-weight: 900; letter-spacing: -0.025em; }
+.ses-titulo-doc     { font-size: 2.25rem;  line-height: 1.1; color: var(--t-800); font-weight: 900; letter-spacing: -0.025em; }
+.ses-titulo-secao   { font-size: 1.875rem; line-height: 1.15; color: var(--ses-darkblue); font-weight: 900; letter-spacing: -0.025em; }
+.ses-titulo-card    { font-size: 1.125rem; line-height: 1.25; color: var(--t-800); font-weight: 900; letter-spacing: -0.025em; }
+
+.ses-eyebrow {
+    font-size: 10px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--t-400); margin: 0 0 0.25rem;
+}
+.ses-eyebrow--claro { color: rgba(255,255,255,.7); letter-spacing: 0.25em; }
+
+.ses-corpo       { font-size: 0.875rem; font-weight: 500; line-height: 1.625; color: var(--t-600); }
+.ses-corpo-denso { font-size: 0.75rem;  font-weight: 500; line-height: 1.625; color: var(--t-500); }
+
+/* Numeros alinhados: obrigatorio em qualquer coluna de numeros */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* --------------------------------------------------------------------------
+   3. ESTRUTURA DA PAGINA
+   -------------------------------------------------------------------------- */
+.ses-pagina {
+    width: 100%;
+    max-width: 1400px;      /* 1200 documento curto · 1400 padrao · 1800 denso */
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+@media (min-width: 640px) { .ses-pagina { padding: 2rem 1.5rem; } }
+@media (min-width: 1024px){ .ses-pagina { padding: 2rem 2rem; } }
+
+.ses-pagina--estreita { max-width: 1200px; }
+.ses-pagina--larga    { max-width: 1800px; }
+
+.ses-stack > * + * { margin-top: 1.5rem; }   /* entre blocos da tela */
+.ses-feed  > * + * { margin-top: 2rem; }     /* entre cards do feed */
+
+.ses-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(1, 1fr); }
+@media (min-width: 640px)  { .ses-grid--2, .ses-grid--3, .ses-grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .ses-grid--3 { grid-template-columns: repeat(3, 1fr); }
+                             .ses-grid--4 { grid-template-columns: repeat(4, 1fr); } }
+
+/* --------------------------------------------------------------------------
+   4. HERO — gradiente + onda + orbes + glass (as quatro camadas)
+   Nunca empilhe mais que estas quatro.
+   -------------------------------------------------------------------------- */
+.ses-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-card);
+    box-shadow: var(--sh-md);
+    background: linear-gradient(135deg, var(--ses-green), var(--ses-green-deep));
+    padding: 1.5rem;
+    color: #fff;
+}
+@media (min-width: 640px) { .ses-hero { padding: 2rem; } }
+
+.ses-hero--sus { background: linear-gradient(135deg, var(--ses-blue), var(--ses-darkblue)); }
+.ses-hero--ses { background: linear-gradient(135deg, var(--ses-orange), var(--ses-darkorange)); }
+
+/* A onda. Ancorada embaixo, branca a 14%, compoe sobre qualquer gradiente. */
+.ses-onda {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: var(--ses-wave);
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% auto;
+    opacity: .14;
+    transition: background-position .7s ease;
+}
+.ses-hero:hover .ses-onda { background-position: bottom right; }   /* a mare */
+
+/* Orbes de luz, sempre em par oposto */
+.ses-orbe { position: absolute; border-radius: var(--r-full); filter: blur(48px); pointer-events: none; }
+.ses-orbe--clara  { right: -4rem;  top: -5rem;    width: 16rem; height: 16rem; background: rgba(255,255,255,.10); }
+.ses-orbe--escura { left:  -2.5rem; bottom: -4rem; width: 12rem; height: 12rem; background: rgba(0,0,0,.10); }
+
+.ses-hero__conteudo {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+}
+.ses-hero__titulo { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+
+/* Glass: so sobre superficie colorida, nunca sobre fundo claro */
+.ses-glass {
+    background: rgba(255,255,255,.20);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.25);
+    box-shadow: var(--sh-inner);
+    border-radius: var(--r-2xl);
+    padding: 1rem;
+    color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.ses-glass svg { width: 2rem; height: 2rem; display: block; }
+
+.ses-botao-glass {
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--sh-sm);
+    color: #fff;
+    font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em;
+    padding: .75rem 1.25rem;
+    display: inline-flex; align-items: center; gap: .5rem;
+    cursor: pointer;
+    transition: all .2s;
+}
+.ses-botao-glass:hover { background: #fff; color: var(--ses-green); transform: translateY(-2px); }
+
+/* --------------------------------------------------------------------------
+   5. SUPERFICIES
+   -------------------------------------------------------------------------- */
+.ses-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    box-shadow: var(--sh-sm);
+    padding: 1.25rem;
+    transition: box-shadow .2s, border-color .2s, transform .2s;
+}
+.ses-card--suave { border-color: var(--border-soft); }
+
+.ses-painel {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-panel);
+    box-shadow: var(--sh-craft);
+    padding: 2rem;
+}
+@media (min-width: 640px) { .ses-painel { padding: 3rem; } }
+
+.ses-caixa {          /* caixa interna: justificativa, escopo, citacao */
+    background: var(--field);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-3xl);
+    padding: 1.5rem;
+}
+
+.ses-barra {          /* barra de rotulos no topo, o lugar das pills */
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-card);
+    box-shadow: var(--sh-sm);
+    padding: 1rem;
+    display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
+}
+@media (min-width: 640px) { .ses-barra { padding: 1.25rem; } }
+
+.ses-divisor-vertical { width: 1px; height: 1.5rem; background: var(--border); flex-shrink: 0; }
+
+/* Divisoria de secao com contagem */
+.ses-divisor {
+    display: flex; align-items: center; gap: .75rem;
+    color: var(--t-400);
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em;
+}
+.ses-divisor::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.ses-divisor .ses-contagem { color: var(--t-300); }
+
+/* --------------------------------------------------------------------------
+   6. PILLS, CHIPS E TILES
+   Pill e o unico controle de rotulo. Nada de <select>.
+   -------------------------------------------------------------------------- */
+.ses-pill {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .5rem 1rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--t-500);
+    box-shadow: var(--sh-sm);
+    font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+    transition: all .2s;
+}
+.ses-pill--ativa { background: var(--ses-green); border-color: var(--ses-green); color: #fff; box-shadow: var(--sh-md); }
+.ses-pill--sus   { background: var(--ses-blue);   border-color: var(--ses-blue);   color: #fff; }
+.ses-pill--ses   { background: var(--ses-orange); border-color: var(--ses-orange); color: #fff; }
+
+.ses-chip {
+    display: inline-flex; align-items: center; gap: .375rem;
+    padding: .25rem .625rem;
+    border-radius: var(--r-full);
+    background: var(--field);
+    border: 1px solid var(--border);
+    color: var(--t-500);
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+}
+.ses-ponto { width: .5rem; height: .5rem; border-radius: var(--r-full); flex-shrink: 0; }
+.ses-ponto--concluido  { background: var(--st-concluido); }
+.ses-ponto--atraso     { background: var(--st-atraso); }
+.ses-ponto--aguardando { background: var(--st-aguardando); }
+.ses-ponto--andamento  { background: var(--st-andamento); }
+.ses-ponto--nao-inic   { background: var(--st-nao-inic); }
+
+/* Tile de icone com gradiente do eixo */
+.ses-tile {
+    width: 3.5rem; height: 3.5rem;
+    border-radius: var(--r-2xl);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; flex-shrink: 0;
+    box-shadow: var(--sh-md);
+    background: linear-gradient(135deg, var(--ses-green), var(--ses-green-deep));
+    position: relative; overflow: hidden;
+    transition: transform .3s, box-shadow .3s;
+}
+.ses-tile--sus { background: linear-gradient(135deg, var(--ses-blue), var(--ses-darkblue)); }
+.ses-tile--ses { background: linear-gradient(135deg, var(--ses-orange), var(--ses-darkorange)); }
+.ses-tile svg  { width: 1.75rem; height: 1.75rem; position: relative; z-index: 10; }
+.ses-tile::before {           /* o brilho do canto */
+    content: ""; position: absolute; right: -.5rem; top: -.75rem;
+    width: 2.25rem; height: 2.25rem; border-radius: var(--r-full);
+    background: rgba(255,255,255,.15);
+}
+
+/* --------------------------------------------------------------------------
+   7. NUMEROS E DADOS
+   -------------------------------------------------------------------------- */
+.ses-kpi { text-align: left; }
+.ses-kpi__valor {
+    font-size: 2.75rem; font-weight: 900; letter-spacing: -0.03em;
+    line-height: 1; color: var(--ses-darkblue);
+    font-variant-numeric: tabular-nums;
+}
+.ses-kpi__valor--verde   { color: var(--ses-green-deep); }
+.ses-kpi__valor--laranja { color: var(--ses-darkorange); }
+.ses-kpi__rotulo {
+    margin-top: .5rem;
+    font-size: 10px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--t-400);
+}
+.ses-kpi__nota { margin-top: .25rem; font-size: .75rem; font-weight: 500; color: var(--t-500); }
+
+.ses-tabela { width: 100%; border-collapse: collapse; font-size: .8125rem; }
+.ses-tabela th {
+    text-align: left; padding: .75rem 1rem;
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--t-400); border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+.ses-tabela td { padding: .875rem 1rem; border-bottom: 1px solid var(--border-soft); color: var(--t-600); font-weight: 500; }
+.ses-tabela tr:last-child td { border-bottom: 0; }
+.ses-tabela tbody tr { transition: background-color .15s; }
+.ses-tabela tbody tr:hover { background: var(--border-soft); }
+.ses-tabela .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--t-700); }
+
+/* Barra de proporcao */
+.ses-barra-prog { height: .5rem; border-radius: var(--r-full); background: var(--border); overflow: hidden; }
+.ses-barra-prog__fill { height: 100%; border-radius: var(--r-full); background: var(--ses-green); }
+
+/* Callout */
+.ses-callout {
+    border-left: 3px solid var(--ses-green);
+    background: var(--field);
+    border-radius: 0 var(--r-3xl) var(--r-3xl) 0;
+    padding: 1.25rem 1.5rem;
+    color: var(--t-600);
+}
+.ses-callout--atencao { border-left-color: var(--st-atraso); }
+
+/* Estado vazio */
+.ses-vazio {
+    background: var(--surface); border: 1px solid var(--border-soft);
+    border-radius: var(--r-card); box-shadow: var(--sh-sm);
+    padding: 5rem 1.5rem; text-align: center;
+}
+.ses-vazio__tile {
+    width: 4rem; height: 4rem; margin: 0 auto 1rem;
+    border-radius: var(--r-2xl); background: var(--field); color: var(--t-300);
+    display: flex; align-items: center; justify-content: center;
+}
+.ses-vazio p { font-size: .875rem; font-weight: 700; color: var(--t-400); }
+
+/* --------------------------------------------------------------------------
+   8. MOVIMENTO — o subconjunto que faz sentido fora do sistema
+   Um gesto por elemento. O gesto acompanha a forma do elemento.
+   -------------------------------------------------------------------------- */
+.mov-lift:hover  { transform: translateY(-2px); box-shadow: var(--sh-md); border-color: var(--t-300); }
+.mov-slide:hover { transform: translateX(2px);  box-shadow: var(--sh-sm); }
+.mov-tilt:hover  { transform: rotate(-6deg) scale(1.1); box-shadow: var(--sh-lg); }
+.mov-pop:hover   { transform: scale(1.25); }
+
+.fade-in { animation: fadeIn .4s ease-out both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Entrada escalonada. fill-mode both e obrigatorio e a regra nao pode
+   declarar opacity propria, senao o elemento some ao fim da animacao. */
+.fade-in-seq { animation: fadeIn .45s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+    .mov-lift, .mov-slide, .mov-tilt, .mov-pop {
+        transition-property: color, background-color, border-color, box-shadow, opacity !important;
+    }
+    .mov-lift:hover, .mov-slide:hover, .mov-tilt:hover, .mov-pop:hover { transform: none !important; }
+    .fade-in, .fade-in-seq { animation: none !important; }
+    .ses-onda { transition: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   9. ACESSIBILIDADE E ROLAGEM
+   -------------------------------------------------------------------------- */
+:focus-visible { outline: 2px solid var(--ses-green); outline-offset: 2px; }
+
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--border-soft); }
+::-webkit-scrollbar-thumb { background: var(--t-300); border-radius: var(--r-full); }
