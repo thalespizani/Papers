@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4F7A24">
+<title>Destaques da Saúde</title>
+<style>
+/*__INTER__*/
+:root{
+  --green:#8DC63F;--green-d:#4F7A24;--green-t:#EAF4DD;
+  --blue:#007FB6;--blue-d:#005B8E;--blue-t:#D6E7F1;
+  --orange:#F58220;--orange-d:#D96C14;--orange-t:#FCEDE1;
+  --sky:#60A5FA;--red:#EF4444;
+  --line:#CBD5E1;--bg:#F1F5F9;--ink:#212C3E;--ink2:#445266;--mute:#64748B;
+  --r:20px;
+  --shadow:0 1px 2px rgba(33,44,62,.06),0 6px 18px rgba(33,44,62,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:500;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+b,strong{font-weight:700}
+
+/* tema por seção */
+.t-green{--c:var(--green);--cd:var(--green-d);--ct:var(--green-t)}
+.t-blue{--c:var(--blue);--cd:var(--blue-d);--ct:var(--blue-t)}
+.t-orange{--c:var(--orange);--cd:var(--orange-d);--ct:var(--orange-t)}
+
+/* cabeçalho (Figma: Cabeçalho) */
+.hero{position:relative;overflow:hidden;border-radius:var(--r);padding:22px 20px 20px;color:#fff;
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-d) 100%);box-shadow:var(--shadow)}
+.hero::before,.hero::after,.ch::before{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.14);pointer-events:none}
+.hero::before{width:260px;height:260px;right:-90px;top:-120px}
+.hero::after{width:150px;height:150px;right:30px;bottom:-90px;background:rgba(255,255,255,.08)}
+.hero .eyebrow{font-size:11px;font-weight:700;opacity:.9}
+.hero h1{font-weight:900;font-size:30px;line-height:1.08;letter-spacing:-.02em;margin:10px 0 6px;text-shadow:0 1px 2px rgba(0,0,0,.12)}
+.hero p{font-size:13px;opacity:.92;max-width:34ch}
+.hero .row{display:flex;gap:12px;align-items:center}
+.tile{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);box-shadow:0 2px 6px rgba(0,0,0,.1);backdrop-filter:blur(6px)}
+.tile svg{width:24px;height:24px;stroke:#fff}
+svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* navegação */
+nav{position:sticky;top:0;z-index:20;margin:14px -16px 0;padding:10px 16px;background:rgba(241,245,249,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+nav .pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}
+nav .pills::-webkit-scrollbar{display:none}
+nav a{flex:none;scroll-snap-align:start;text-decoration:none;font-size:13px;font-weight:700;color:var(--ink2);background:#fff;
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;transition:all .2s}
+nav a.on{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--c),var(--cd));box-shadow:0 2px 8px rgba(0,0,0,.12)}
+
+/* seção */
+section{padding-top:18px;scroll-margin-top:58px}
+section+section{margin-top:18px}
+.sh{position:relative;overflow:hidden;border-radius:var(--r);padding:18px;color:#fff;background:linear-gradient(135deg,var(--c),var(--cd));box-shadow:var(--shadow)}
+.sh .row{display:flex;gap:12px;align-items:center}
+.sh h2{font-weight:900;font-size:24px;line-height:1.1;letter-spacing:-.015em;text-shadow:0 1px 2px rgba(0,0,0,.12)}
+.sh::before{width:220px;height:220px;right:-80px;top:-110px;content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}
+
+
+/* card com gráfico (Figma) */
+.card{background:#fff;border-radius:var(--r);margin-top:12px;overflow:hidden;box-shadow:var(--shadow)}
+.ch{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;padding:12px 16px;color:#fff;background:linear-gradient(135deg,var(--c),var(--cd))}
+.ch::before{width:180px;height:180px;right:-60px;top:-90px}
+.ch .tile{width:34px;height:34px;border-radius:10px}
+.ch .tile svg{width:18px;height:18px}
+.ch h3{font-weight:900;font-size:16px;line-height:1.2;text-shadow:0 1px 2px rgba(0,0,0,.12)}
+.card.soft .ch{background:var(--ct);color:var(--cd)}
+.card.soft .ch::before{display:none}
+.card.soft .ch .tile{background:rgba(255,255,255,.6);border-color:rgba(255,255,255,.9);box-shadow:none}
+.card.soft .ch .tile svg{stroke:var(--cd)}
+.card.soft .ch h3{text-shadow:none}
+.cb{padding:16px}
+.note{font-size:12px;color:var(--mute);margin-top:10px;line-height:1.4}
+
+/* números */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--ct);border-radius:14px;padding:12px}
+.kpi .v{font-weight:900;font-size:26px;line-height:1.05;letter-spacing:-.02em;color:var(--cd)}
+.kpi .v small{font-size:14px;font-weight:700}
+.kpi .l{font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.3}
+.kpi.full{grid-column:1/-1}
+.big{display:flex;align-items:center;gap:14px}
+.big .v{font-weight:900;font-size:56px;line-height:1;letter-spacing:-.04em;background:linear-gradient(135deg,var(--c),var(--cd));-webkit-background-clip:text;background-clip:text;color:transparent}
+.big .l{font-size:14px;color:var(--ink2);line-height:1.35}
+.big .l b{color:var(--ink)}
+
+/* anel (Figma: 93 de 93) */
+.ringbox{display:flex;gap:14px;align-items:center}
+.ring{flex:none;position:relative;width:118px;background:var(--ct);border-radius:16px;padding:12px 8px 10px;text-align:center}
+.ring svg{width:84px;height:84px;display:block;margin:0 auto}
+.ring .n{position:absolute;left:0;right:0;top:34px;font-weight:900;font-size:22px;line-height:1;color:var(--c)}
+.ring .d{position:absolute;left:0;right:0;top:58px;font-size:10px;font-weight:700;color:var(--ink2)}
+.ring .lab{font-size:11px;font-weight:700;color:var(--ink2);margin-top:6px;line-height:1.25}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#fff;border-radius:999px;padding:5px 10px;background:linear-gradient(135deg,var(--c),var(--cd));box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.chip svg{width:14px;height:14px;stroke:#fff}
+
+.bars{display:flex;flex-direction:column;gap:12px;flex:1;min-width:0}
+
+/* barra empilhada */
+.stack{display:flex;height:40px;border-radius:12px;overflow:hidden;gap:3px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;min-width:34px}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px;color:var(--ink2)}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* colunas (escala real: altura em px calculada no JS a partir de data-v) */
+.cols{display:flex;align-items:flex-end;gap:10px;--h:150px}
+.cols.pair{gap:28px;padding:0 10%;--h:160px}
+.cols.pair .col .cf{border-radius:12px 12px 4px 4px}
+.ctr{text-align:center}
+.ct{font-size:14px;color:var(--ink2);margin-top:12px;line-height:1.5}
+.ct strong{color:var(--ink)}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}
+.col .plot{height:var(--h);width:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.col .cv{font-size:12px;font-weight:900;color:var(--ink);margin-bottom:4px;white-space:nowrap}
+.cols.pair .col .cv{font-size:15px}
+.col .cf{flex:none;width:100%;border-radius:10px 10px 4px 4px;background:linear-gradient(180deg,var(--c),var(--cd));height:0;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.col .cf.ghost{background:var(--line)}
+.col .cf.alt{background:linear-gradient(180deg,var(--sky),var(--blue))}
+.col .cf.hatch{background:repeating-linear-gradient(135deg,var(--c) 0 6px,var(--cd) 6px 12px)}
+.col .cy{font-size:12px;font-weight:700;color:var(--ink2);margin-top:6px;text-align:center;line-height:1.25}
+.base{height:2px;background:var(--line);border-radius:2px;margin-top:-1px}
+.x{display:inline-block;margin-top:8px;font-size:12px;font-weight:900;color:var(--cd);background:var(--ct);border-radius:999px;padding:3px 9px}
+.sub{font-size:12px;font-weight:700;color:var(--ink2);margin:16px 0 8px}
+.map text{font-family:inherit;font-weight:900;paint-order:stroke;stroke:#fff;stroke-width:6px;stroke-linejoin:round;pointer-events:none}
+
+/* mapas */
+.map{position:relative;margin:0 -4px}
+.map svg{width:100%;height:auto;display:block;touch-action:manipulation}
+.map path{transition:fill .5s,opacity .3s}
+.map .hit{cursor:pointer}
+.map .sel{stroke:var(--ink)!important;stroke-width:2.5!important}
+.det{margin-top:10px;min-height:52px;background:var(--bg);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--ink2);line-height:1.4}
+.det b{color:var(--ink)}
+.det .hint{display:flex;gap:8px;align-items:center;color:var(--mute)}
+.det .hint svg{width:16px;height:16px;flex:none}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:4px;gap:4px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;font:inherit;font-weight:900;font-size:15px;color:var(--ink2);padding:8px;border-radius:9px;cursor:pointer}
+.seg button.on{background:#fff;color:var(--cd);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+
+/* lista PDR */
+.lst{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:9px 2px;border-bottom:1px solid var(--bg);font-size:13px}
+.li:last-child{border-bottom:0}
+.li .nm{font-weight:700;color:var(--ink)}
+.li .ab{color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.li .dl{font-weight:900;font-size:12px;border-radius:999px;padding:3px 8px;min-width:58px;text-align:center;white-space:nowrap}
+.dl.up{background:var(--green-t);color:var(--green-d)}
+.dl.eq{background:var(--bg);color:var(--ink2)}
+.dl.nv{background:var(--blue-t);color:var(--blue-d)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+
+.manchete{font-weight:900;font-size:22px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.manchete em{font-style:normal;background:linear-gradient(135deg,var(--c),var(--cd));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+footer{margin-top:28px;border-radius:var(--r);padding:18px;color:#fff;background:linear-gradient(135deg,var(--green),var(--green-d));font-size:12px;line-height:1.5;position:relative;overflow:hidden}
+footer b{font-size:14px}
+footer p{opacity:.9;margin-top:6px}
+
+
+/* refinamento: hierarquia e simetria */
+section+section{margin-top:30px}
+.sh{padding:20px 18px}
+.sh .row{gap:14px}
+.sh .tile{width:52px;height:52px;border-radius:14px}
+.sh .tile svg{width:28px;height:28px}
+.sh h2{font-size:27px}
+.sh .sp{font-size:13px;font-weight:700;opacity:.92;margin-top:3px}
+.card{margin-top:14px}
+.manchete{font-size:20px;text-align:center}
+.cb{padding:18px 16px}
+.ct{margin-top:14px}
+.leg{justify-content:center}
+.note{text-align:center}
+.sub{text-align:center;margin:22px 0 10px}
+.sub.l{text-align:left}
+.ctr{text-align:center;margin-top:10px}
+.ringbox{align-items:stretch}
+.ring{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px 8px}
+.ring .rw{position:relative;width:84px;height:84px}
+.ring .n{top:22px}
+.ring .d{top:47px}
+.ring .lab{margin-top:8px}
+.big{justify-content:center}
+.kpi{display:flex;flex-direction:column;justify-content:center}
+.seg{max-width:260px;margin-left:auto;margin-right:auto}
+
+
+/* tipografia: escala única, sem caixa alta, Inter Black para títulos e números, Medium para texto */
+body{font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+h1,h2,h3,.manchete{text-wrap:balance}
+p{text-wrap:pretty}
+.hero .eyebrow{font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;opacity:.95}
+.hero h1{font-size:32px;line-height:1.05;letter-spacing:-.025em;margin:0}
+.hero{padding:26px 20px}
+.hero p{font-size:14px;line-height:1.45}
+.sh h2{font-size:27px;line-height:1.05;letter-spacing:-.025em}
+.sh .sp{font-size:14px;font-weight:500;letter-spacing:0;opacity:.95}
+.ch h3{font-size:17px;letter-spacing:-.01em;line-height:1.2}
+.manchete{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.ct{font-size:15px;line-height:1.55}
+.det{font-size:14px}
+.sub{font-size:14px;font-weight:700;color:var(--ink);text-transform:none;letter-spacing:-.005em;margin:26px 0 16px}
+.big .v{letter-spacing:-.045em}
+.big .l{font-size:15px;line-height:1.4}
+.kpi .v{font-size:28px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:15px;letter-spacing:0;margin-left:1px}
+.kpi .l{font-size:13px;line-height:1.35}
+.ring .n{font-size:24px;letter-spacing:-.03em}
+.ring .d{font-size:11px}
+.ring .lab{font-size:12px}
+.col .cv{font-size:13px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.cols.pair .col .cv{font-size:17px;letter-spacing:-.02em}
+.col .cy{font-size:12px;font-weight:500}
+.cols.pair .col .cy{font-size:13px}
+.leg{font-size:12px;font-weight:500}
+.note{font-size:12px;font-weight:500}
+.x,.chip{font-size:12px;letter-spacing:0}
+.stack div{font-size:14px;letter-spacing:-.01em}
+nav a{font-size:14px;letter-spacing:-.005em}
+.seg button{font-size:16px;letter-spacing:-.01em}
+.li{font-size:14px}
+.li .ab{font-size:13px}
+footer{font-size:13px}
+
+.def{margin-top:14px;background:var(--ct);border-left:4px solid var(--c);border-radius:4px 12px 12px 4px;padding:12px 14px;font-size:14px;line-height:1.5;color:var(--ink2)}
+.def b{color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Destaques da Saúde</h1>
+</header>
+
+<nav aria-label="Temas"><div class="pills">
+  <a href="#aps" class="t-green">APS</a>
+  <a href="#upa" class="t-orange">UPAs</a>
+  <a href="#hemo" class="t-blue">Hemodiálise</a>
+  <a href="#opera" class="t-orange">Opera Mais</a>
+  <a href="#pdr" class="t-green">PDR</a>
+</div></nav>
+
+<!-- ============ APS ============ -->
+<section id="aps" class="t-green">
+  <div class="sh">
+    <div class="row">
+      <div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></svg></div>
+      <div><h2>Atenção Primária</h2></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/></svg></div><h3>Cobertura da Saúde da Família</h3></div>
+    <div class="cb">
+      <div class="big"><div class="v">100%</div><div class="l">de cobertura de Saúde da Família no estado</div></div>
+      <div class="map" id="mapAps" style="margin-top:12px"></div>
+      <div class="leg">
+        <span><i style="background:var(--green-d)"></i>100%</span>
+        <span><i style="background:var(--green)"></i>90% a 99,9%</span>
+        <span><i style="background:#FCD96B"></i>abaixo de 90%</span>
+      </div>
+      <div class="det" id="detAps"><span class="hint"><svg class="i" viewBox="0 0 24 24"><path d="M9 11V6a3 3 0 0 1 6 0v5"/><path d="M5 11h14l-1 10H6z"/></svg>Toque num município para ver a cobertura.</span></div>
+      <p class="ct"><strong>732 dos 853 municípios</strong> (86%) já têm cobertura plena. O desafio do próximo ciclo é chegar a 100% em todos.</p>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg></div><h3>UBS financiadas desde 2019</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0 0 14px">Em 2019, havia um <strong>cemitério de obras</strong>: 106 UBS financiadas em 2013 estavam paradas. Desde então, o Estado financiou <strong>445 UBS</strong>, retomando as obras herdadas e construindo novas.</p>
+      <div class="ringbox">
+        <div class="ring" data-ring="215" data-total="445">
+          <div class="rw"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="34" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="8"/><circle class="arc" cx="42" cy="42" r="34" fill="none" stroke="var(--c)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 42 42)"/></svg><div class="n">215</div><div class="d">de 445</div></div>
+          <div class="lab">UBS entregues</div>
+        </div>
+        <div class="bars">
+          <div class="kpi"><div class="v">R$ 678 <small>mi</small></div><div class="l">investidos na construção de UBS</div></div>
+          <div class="kpi"><div class="v">230</div><div class="l">UBS em obra, a entregar</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg></div><h3>TeleMais Saúde</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0 0 14px">Leva o especialista até a UBS: o médico da Atenção Primária discute o caso a distância e, na maioria das vezes, resolve ali mesmo.</p>
+      <div class="ringbox">
+        <div class="ring" data-ring="63" data-total="100">
+          <div class="rw"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="34" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="8"/><circle class="arc" cx="42" cy="42" r="34" fill="none" stroke="var(--c)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 42 42)"/></svg><div class="n">63%</div><div class="d">evitados</div></div>
+          <div class="lab">encaminhamentos ao especialista</div>
+        </div>
+        <div class="bars">
+          <div class="kpi"><div class="v">139.903</div><div class="l">teleconsultorias, set/2024 a set/2026</div></div>
+          <div class="kpi"><div class="v">853</div><div class="l">municípios com acesso</div></div>
+        </div>
+      </div>
+      <p class="sub l">Piloto 2026 · Contagem, Lagoa Santa e Vespasiano</p>
+      <p class="ct" style="margin:0">O cidadão faz a <strong>teleorientação</strong> pelo MG App e é direcionado à UBS, à UPA ou ao especialista, que pode atendê-lo por <strong>teleconsulta</strong>.</p>
+      <div class="kpis" style="margin-top:10px">
+        <div class="kpi"><div class="v">328</div><div class="l">teleorientações de abr a set/2026</div></div>
+        <div class="kpi"><div class="v">193</div><div class="l">teleconsultas com especialista agendadas</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UPAs ============ -->
+<section id="upa" class="t-orange">
+  <div class="sh">
+    <div class="row">
+      <div class="tile"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></div>
+      <div><h2>UPAs 24h</h2></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/></svg></div><h3>Custeio estadual das UPAs</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0">Em 2018, o Estado cobria só uma parte do incentivo federal das UPAs. A partir de 2023, o custeio estadual <strong>quase quadruplicou</strong>.</p>
+      <p class="sub">Repasse estadual por mês</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">R$ 5 mi</div><div class="cf ghost" data-v="5"></div></div><div class="cy">até 2022</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 19,4 mi</div><div class="cf" data-v="19.4"></div></div><div class="cy">desde 2023</div></div>
+      </div>
+      <div class="ctr"><span class="x">3,9× mais</span></div>
+      <p class="sub">Parte do incentivo federal paga pelo Estado</p>
+      <div class="cols pair" data-max="100">
+        <div class="col"><div class="plot"><div class="cv">25%</div><div class="cf ghost" data-v="25"></div></div><div class="cy">2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">100%</div><div class="cf" data-v="100"></div></div><div class="cy">desde 2025</div></div>
+      </div>
+      <div class="kpis" style="margin-top:16px">
+        <div class="kpi"><div class="v">72</div><div class="l">UPAs cofinanciadas pelo Estado</div></div>
+        <div class="kpi"><div class="v">R$ 500 <small>mil</small></div><div class="l">por mês para UPAs novas (R$ 300 mil para ampliadas)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div><h3>Novas UPAs com investimento estadual</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0 0 6px">Obras e equipamentos já pagos em <strong>Diamantina, Barbacena, Coromandel, Paracatu e Montes Claros</strong>, convênio em Cássia e <strong>19 UPAs</strong> em tramitação.</p>
+      <div class="map" id="mapUpa"></div>
+      <div class="leg" id="legUpa"></div>
+      <div class="det" id="detUpa"><span class="hint"><svg class="i" viewBox="0 0 24 24"><path d="M9 11V6a3 3 0 0 1 6 0v5"/><path d="M5 11h14l-1 10H6z"/></svg>Toque num ponto para ver a UPA.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HEMODIÁLISE ============ -->
+<section id="hemo" class="t-blue">
+  <div class="sh">
+    <div class="row">
+      <div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg></div>
+      <div><h2>Hemodiálise</h2></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M5 17h14v-5l-2-5H7l-2 5z"/><path d="M5 12h14"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg></div><h3>Distância até o tratamento</h3></div>
+    <div class="cb">
+      <div class="big"><div class="v">−60%</div><div class="l">na <b>distância média</b> que o paciente percorre até a hemodiálise</div></div>
+      <p class="ct">O paciente renal faz hemodiálise três vezes por semana. Com os serviços concentrados nos polos, muitos viajavam horas a cada sessão. Desde 2023, o Estado financia <strong>28 novos centros</strong> fora dos polos.</p>
+      <div class="map" id="mapHemo" style="margin-top:8px"></div>
+      <div class="leg" id="legHemo"></div>
+      <div class="det" id="detHemo"><span class="hint"><svg class="i" viewBox="0 0 24 24"><path d="M9 11V6a3 3 0 0 1 6 0v5"/><path d="M5 11h14l-1 10H6z"/></svg>Toque numa gota para ver o centro.</span></div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/></svg></div><h3>28 novos centros</h3></div>
+    <div class="cb">
+      <div class="stack">
+        <div style="flex:6;background:var(--green-d)">6</div>
+        <div style="flex:9;background:var(--orange)">9</div>
+        <div style="flex:13;background:var(--blue)">13</div>
+      </div>
+      <div class="leg"><span><i style="background:var(--green-d)"></i>implantados</span><span><i style="background:var(--orange)"></i>pagos</span><span><i style="background:var(--blue)"></i>em tramitação</span></div>
+      <p class="ct">Ainda restam <strong>14 microrregiões</strong> sem o serviço.</p>
+      <div class="kpis" style="margin-top:12px">
+        <div class="kpi"><div class="v">226</div><div class="l">equipamentos de hemodiálise financiados</div></div>
+        <div class="kpi"><div class="v">R$ 29 <small>mi</small></div><div class="l">em equipamentos (2023 a 2025)</div></div>
+        <div class="kpi full"><div class="v">≈ R$ 86 <small>mi</small></div><div class="l">na política de 2023 a 2025: novos serviços, equipamentos e custeio</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPERA MAIS ============ -->
+<section id="opera" class="t-orange">
+  <div class="sh">
+    <div class="row">
+      <div class="tile"><svg class="i" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg></div>
+      <div><h2>Opera Mais</h2></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/></svg></div><h3>Cirurgias eletivas por ano</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0 0 4px">Com a fila represada pela pandemia e a tabela SUS defasada, o Opera Mais passou a <strong>complementar a tabela e premiar metas</strong>. Em 2025, Minas passou de <strong>1 milhão de cirurgias eletivas</strong>.</p>
+      <div class="cols" style="--h:170px">
+        <div class="col"><div class="plot"><div class="cv">677 mil</div><div class="cf" data-v="677"></div></div><div class="cy">2022</div></div>
+        <div class="col"><div class="plot"><div class="cv">823 mil</div><div class="cf" data-v="823"></div></div><div class="cy">2023</div></div>
+        <div class="col"><div class="plot"><div class="cv">970 mil</div><div class="cf" data-v="970"></div></div><div class="cy">2024</div></div>
+        <div class="col"><div class="plot"><div class="cv">&gt; 1 mi</div><div class="cf hatch" data-v="1000"></div></div><div class="cy">2025</div></div>
+      </div>
+      <p class="note">Cirurgias ambulatoriais e hospitalares.</p>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M12 8v6"/><path d="M9 11h6"/></svg></div><h3>Só cirurgias hospitalares</h3></div>
+    <div class="cb">
+      <div class="cols">
+        <div class="col"><div class="plot"><div class="cv">186,5 mil</div><div class="cf ghost" data-v="186.5"></div></div><div class="cy">2019</div></div>
+        <div class="col"><div class="plot"><div class="cv">221 mil</div><div class="cf" data-v="220.9"></div></div><div class="cy">2022</div></div>
+        <div class="col"><div class="plot"><div class="cv">274 mil</div><div class="cf" data-v="274.5"></div></div><div class="cy">2023</div></div>
+        <div class="col"><div class="plot"><div class="cv">322 mil</div><div class="cf" data-v="322.3"></div></div><div class="cy">2024</div></div>
+        <div class="col"><div class="plot"><div class="cv">348 mil</div><div class="cf" data-v="348"></div></div><div class="cy">2025</div></div>
+      </div>
+      <div class="ctr" style="margin-top:14px"><span class="chip"><svg class="i" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>+86,6% sobre 2019, antes da pandemia</span></div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3>Recursos estaduais no Opera Mais</h3></div>
+    <div class="cb">
+      <div class="cols">
+        <div class="col"><div class="plot"><div class="cv">R$ 129 mi</div><div class="cf" data-v="129"></div></div><div class="cy">2022</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 372 mi</div><div class="cf" data-v="372"></div></div><div class="cy">2023</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 541 mi</div><div class="cf" data-v="541"></div></div><div class="cy">2024</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 511 mi</div><div class="cf" data-v="511"></div></div><div class="cy">2025</div></div>
+      </div>
+      <div class="ctr"><span class="x">R$ 1,55 bi de 2022 a 2025</span></div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><h3>Estrutura hospitalar</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0 0 12px">Para operar mais, os hospitais precisaram de equipamento e de leito.</p>
+      <div class="big" style="flex-direction:column;align-items:center;gap:4px;text-align:center"><div class="v" style="white-space:nowrap">R$ 893 <span style="font-size:24px">mi</span></div><div class="l">em equipamentos para hospitais e urgência, de 2023 a 2026: <b>1.146 indicações em 222 municípios</b></div></div>
+      <p class="sub">Leitos SUS de UTI adulto</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">2.013</div><div class="cf ghost" data-v="2013"></div></div><div class="cy">dez/2019</div></div>
+        <div class="col"><div class="plot"><div class="cv">2.668</div><div class="cf" data-v="2668"></div></div><div class="cy">ago/2026</div></div>
+      </div>
+      <div class="ctr"><span class="x">+655 leitos</span></div>
+      <p class="sub">Leitos SUS de unidade coronariana</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">45</div><div class="cf ghost" data-v="45"></div></div><div class="cy">dez/2019</div></div>
+        <div class="col"><div class="plot"><div class="cv">127</div><div class="cf" data-v="127"></div></div><div class="cy">ago/2026</div></div>
+      </div>
+      <div class="ctr"><span class="x">+82 leitos</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PDR ============ -->
+<section id="pdr" class="t-green">
+  <div class="sh">
+    <div class="row">
+      <div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></div>
+      <div><h2>Resolubilidade</h2></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/></svg></div><h3>Resolubilidade por macrorregião</h3></div>
+    <div class="cb">
+      <p class="manchete">Resolubilidade cresce em <em>todas</em> as macrorregiões*</p>
+      <p class="ct">Mede quanto da alta complexidade cada macrorregião resolve sem mandar o paciente para fora. A média estadual subiu de 90,95% para <strong>91,82%</strong>.</p>
+      <div class="seg" role="tablist" style="margin-top:14px">
+        <button type="button" data-ano="2018" role="tab">2018</button>
+        <button type="button" data-ano="2025" role="tab" class="on">2025</button>
+      </div>
+      <div class="map" id="mapPdr"></div>
+      <div class="leg" id="legPdr"></div>
+      <div class="det" id="detPdr"><span class="hint"><svg class="i" viewBox="0 0 24 24"><path d="M9 11V6a3 3 0 0 1 6 0v5"/><path d="M5 11h14l-1 10H6z"/></svg>Toque numa macrorregião para comparar 2018 e 2025.</span></div>
+      <p class="note">* Centro, Sudeste e Triângulo do Sul, que já estavam acima de 95%, praticamente não mudaram. A antiga Macro Sul, hoje dividida em três, segue acima de 90%.</p>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg></div><h3>2018 → 2025, macro a macro</h3></div>
+    <div class="cb"><div class="lst" id="lstPdr"></div></div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/></svg></div><h3>Situação das macrorregiões</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0">Em 2018, <strong>5 das 13 macros</strong> estavam em situação baixa ou crítica. Em 2025, <strong>só 1 das 16</strong>, mesmo com muito mais procedimentos.</p>
+      <p class="sub">Macros ideal ou boa (≥ 80%)</p>
+      <div class="cols pair" data-max="100">
+        <div class="col"><div class="plot"><div class="cv">53,8%</div><div class="cf ghost" data-v="53.8"></div></div><div class="cy">2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">75%</div><div class="cf" data-v="75"></div></div><div class="cy">2025</div></div>
+      </div>
+      <p class="sub">Macros baixa ou crítica (&lt; 70%)</p>
+      <div class="cols pair" data-max="100">
+        <div class="col"><div class="plot"><div class="cv">38,5%</div><div class="cf ghost" data-v="38.5"></div></div><div class="cy">2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">6,3%</div><div class="cf alt" data-v="6.3"></div></div><div class="cy">2025</div></div>
+      </div>
+      <p class="sub">Procedimentos de alta complexidade</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">187,5 mil</div><div class="cf ghost" data-v="187.5"></div></div><div class="cy">2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">331 mil</div><div class="cf" data-v="331"></div></div><div class="cy">2025</div></div>
+      </div>
+      <div class="ctr"><span class="x">+76,5%</span></div>
+      <p class="sub">Procedimentos de média complexidade</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">699,6 mil</div><div class="cf ghost" data-v="699.6"></div></div><div class="cy">2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">782,6 mil</div><div class="cf" data-v="782.6"></div></div><div class="cy">2025</div></div>
+      </div>
+      <div class="ctr"><span class="x">+11,9%</span></div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="ch"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3>Do Pro-Hosp ao Valora Minas</h3></div>
+    <div class="cb">
+      <p class="ct" style="margin:0">Em 2020, o <strong>Valora Minas</strong> substituiu o Pro-Hosp e passou a financiar os hospitais pelo papel que cumprem na rede.</p>
+      <div class="def"><b>Custeio hospitalar</b> é o recurso que mantém o hospital funcionando no dia a dia: equipes, medicamentos, insumos e manutenção. É diferente do investimento, que paga obras e equipamentos.</div>
+      <p class="sub">Custeio hospitalar por ano</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">R$ 677 mi</div><div class="cf ghost" data-v="677"></div></div><div class="cy">Pro-Hosp<br>2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 2 bi</div><div class="cf" data-v="2000"></div></div><div class="cy">Valora Minas<br>2024 e 2025</div></div>
+      </div>
+      <div class="ctr"><span class="x">3× mais</span></div>
+      <p class="sub">Como o Pro-Hosp se dividia em 2018</p>
+      <div class="stack">
+        <div style="flex:543.5;background:var(--line);color:var(--ink2)">11 hospitais · R$ 543,5 mi</div>
+        <div style="flex:133;background:var(--ink2)">141</div>
+      </div>
+      <p class="ct">Hoje, o Valora Minas chega a <strong>350 hospitais</strong>.</p>
+      <p class="sub">Hospitais filantrópicos</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">R$ 523 mi</div><div class="cf ghost" data-v="523"></div></div><div class="cy">antes</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 1,2 bi</div><div class="cf" data-v="1200"></div></div><div class="cy">hoje</div></div>
+      </div>
+      <p class="sub">Custeio hospitalar total</p>
+      <div class="cols pair">
+        <div class="col"><div class="plot"><div class="cv">R$ 1,9 bi</div><div class="cf ghost" data-v="1.9"></div></div><div class="cy">2018</div></div>
+        <div class="col"><div class="plot"><div class="cv">R$ 4,4 bi</div><div class="cf" data-v="4.4"></div></div><div class="cy">2026</div></div>
+      </div>
+      <p class="ct" style="text-align:center">Soma os hospitais municipais e filantrópicos e a rede própria do Estado (Fhemig).</p>
+      <div class="kpi" style="margin-top:16px"><div class="v">R$ 20,7 <small>bi</small></div><div class="l">na rede hospitalar entre 2023 e 2026: R$ 12,1 bi na rede municipal e filantrópica e R$ 8,6 bi na Fhemig</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>SES-MG · Assessoria Estratégica</b>
+  <p>Briefing do Secretário · novembro de 2026</p>
+</footer>
+</div>
+<script>
+const GEO = /*__GEO__*/;
+const fmt = (v,d=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/-/g,' ').replace(/\s+/g,' ').trim()}
+function svgBase(id){const s=el('svg',{viewBox:`0 0 ${GEO.w} ${GEO.h}`,role:'img'});document.getElementById(id).appendChild(s);return s}
+const HINT = id=>document.getElementById(id).innerHTML;
+
+/* ---------- APS: cobertura por município ---------- */
+(function(){
+  const s=svgBase('mapAps'), det=document.getElementById('detAps');
+  const cor=v=>v>=0.9999?'#4F7A24':v>=0.9?'#8DC63F':'#FCD96B';
+  let sel=null;
+  GEO.mun.forEach(([id,nome,d,c])=>{
+    const p=el('path',{d,fill:cor(c),stroke:'#fff','stroke-width':.6,class:'hit'},s);
+    p.addEventListener('click',()=>{
+      if(sel)sel.classList.remove('sel');sel=p;p.classList.add('sel');s.appendChild(p);
+      det.innerHTML=`<b>${nome}</b><br>Cobertura de Saúde da Família: <b>${fmt(Math.min(c,1)*100)}%</b>`;
+    });
+  });
+})();
+
+/* ---------- mapa de pontos ---------- */
+const DROP='M0,-30C7,-19 13,-13 13,-5A13,13 0 1 1 -13,-5C-13,-13 -7,-19 0,-30Z';
+function pontos(id,detId,legId,grupos,rotulo,forma){
+  const s=svgBase(id), det=document.getElementById(detId);
+  for(const m in GEO.macros2025) el('path',{d:GEO.macros2025[m],fill:'#E2E8F0',stroke:'#fff','stroke-width':2.5},s);
+  const leg=document.getElementById(legId);
+  let sel=null;
+  grupos.forEach(g=>{
+    const ic=forma==='gota'?`<svg viewBox="-14 -31 28 32" width="10" height="12" style="margin-right:5px;vertical-align:-1px"><path d="${DROP}" fill="${g.cor}"/></svg>`:`<i style="background:${g.cor};border-radius:50%"></i>`;
+    leg.insertAdjacentHTML('beforeend',`<span>${ic}${g.nome} (${g.lista.length})</span>`);
+    g.lista.forEach(n=>{
+      const pt=GEO.pts[norm(n)]; if(!pt) return;
+      const gg=el('g',{class:'hit',transform:`translate(${pt[0]},${pt[1]})`},s);
+      el('circle',{r:26,cy:forma==='gota'?-8:0,fill:'transparent'},gg);
+      const c=forma==='gota'
+        ? el('path',{d:DROP,fill:g.cor,stroke:'#fff','stroke-width':3,'stroke-linejoin':'round',transform:'translate(0,8) scale(.85)'},gg)
+        : el('circle',{r:11,fill:g.cor,stroke:'#fff','stroke-width':3},gg);
+      const on=()=>forma==='gota'?c.setAttribute('transform','translate(0,8) scale(1.25)'):c.setAttribute('r',16);
+      const off=()=>forma==='gota'?c.setAttribute('transform','translate(0,8) scale(.85)'):c.setAttribute('r',11);
+      gg.addEventListener('click',()=>{
+        if(sel)sel();sel=off;on();s.appendChild(gg);
+        det.innerHTML=`<b>${n}</b><br><span class="dot" style="background:${g.cor}"></span>${rotulo(g,n)}`;
+      });
+    });
+  });
+}
+pontos('mapHemo','detHemo','legHemo',[
+  {nome:'Implantados',cor:'#4F7A24',lista:['Minas Novas','São João Nepomuceno','Três Pontas','João Pinheiro','Januária','São Gotardo']},
+  {nome:'Pagos',cor:'#F58220',lista:['Lagoa da Prata','Vespasiano','Cássia','Águas Formosas','Taiobeiras','Nanuque','Almenara','Guanhães','Espinosa']},
+  {nome:'Em tramitação',cor:'#007FB6',lista:['Piumhi','Além Paraíba','Serro','Sabará','Santa Luzia','Itabirito','Igarapé','Ibirité','Lagoa Santa','Pirapora','Araçuaí','Itamarandiba','Ouro Fino']}
+],g=>({'Implantados':'Centro de hemodiálise implantado','Pagos':'Recursos do centro já pagos','Em tramitação':'Convênio em tramitação'})[g.nome],'gota');
+pontos('mapUpa','detUpa','legUpa',[
+  {nome:'Investimento pago',cor:'#4F7A24',lista:['Diamantina','Barbacena','Coromandel','Paracatu','Montes Claros']},
+  {nome:'Convênio celebrado',cor:'#F58220',lista:['Cássia']},
+  {nome:'Em tramitação',cor:'#007FB6',lista:['Matipó','Unaí','São Gotardo','Mato Verde','Cambuí','Pompéu','Janaúba','Alpinópolis','Jaíba','Ubá','Piumhi','Vespasiano','Porteirinha','Três Corações','Sete Lagoas','Bicas','Viçosa','Teófilo Otoni','Pedro Leopoldo']}
+],g=>({'Investimento pago':'Investimento estadual pago (obra ou equipamentos)','Convênio celebrado':'Convênio celebrado para a obra','Em tramitação':'Financiamento de obra ou equipamentos em tramitação'})[g.nome]);
+
+/* ---------- PDR ---------- */
+(function(){
+  const R18={'Centro':99.47,'Centro Sul':67.35,'Jequitinhonha':66.97,'Leste':86.00,'Leste do Sul':57.18,'Nordeste':73.81,'Noroeste':58.58,'Norte':94.82,'Oeste':65.25,'Sudeste':96.67,'Sul':97.32,'Triângulo do Norte':96.36,'Triângulo do Sul':98.28};
+  const R25={'Centro':99.13,'Centro Sul':77.04,'Extremo Sul':94.62,'Jequitinhonha':73.50,'Leste':86.48,'Leste do Sul':68.03,'Nordeste':84.77,'Noroeste':83.28,'Norte':95.02,'Oeste':79.85,'Sudeste':95.38,'Sudoeste':98.34,'Sul':91.40,'Triângulo do Norte':97.63,'Triângulo do Sul':98.19,'Vale do Aço':88.69};
+  const ORIG={'Sudoeste':'Sul','Extremo Sul':'Sul','Vale do Aço':'Leste'};
+  const CAT=[[90,'#4F7A24','Ideal (≥ 90%)'],[80,'#A6D46A','Boa (80% a 90%)'],[70,'#FCD96B','Regular (70% a 80%)'],[60,'#F9A86A','Baixa (60% a 70%)'],[0,'#EF4444','Crítica (< 60%)']];
+  const cor=v=>CAT.find(c=>v>=c[0])[1];
+  document.getElementById('legPdr').innerHTML=CAT.map(c=>`<span><i style="background:${c[1]}"></i>${c[2]}</span>`).join('');
+  const box=document.getElementById('mapPdr'), det=document.getElementById('detPdr'), hint=det.innerHTML;
+  const svgs={};
+  ['2018','2025'].forEach(a=>{
+    const s=svgBase('mapPdr'); svgs[a]=s;
+    const R=a==='2018'?R18:R25, G=a==='2018'?GEO.macros2018:GEO.macros2025;
+    let sel=null;
+    for(const m in G){
+      const p=el('path',{d:G[m],fill:cor(R[m]),stroke:'#fff','stroke-width':3,class:'hit'},s);
+      p.addEventListener('click',()=>{
+        if(sel)sel.classList.remove('sel');sel=p;p.classList.add('sel');s.appendChild(p);
+        det.innerHTML=texto(m,a);
+      });
+    }
+    el('path',{d:GEO.contorno,fill:'none',stroke:'#fff','stroke-width':1,'pointer-events':'none'},s);
+  });
+  function texto(m,a){
+    if(a==='2018'){
+      if(m==='Sul') return `<b>Macro Sul (2018): ${fmt(R18.Sul,2)}%</b><br>Hoje dividida em Sul (${fmt(R25.Sul,2)}%), Sudoeste (${fmt(R25.Sudoeste,2)}%) e Extremo Sul (${fmt(R25['Extremo Sul'],2)}%).`;
+      const d=R25[m]-R18[m];
+      return `<b>${m}</b><br>2018: <b>${fmt(R18[m],2)}%</b> → 2025: <b>${fmt(R25[m],2)}%</b> (${d>=0?'+':'−'}${fmt(Math.abs(d))} p.p.)`+(m==='Leste'?'<br>Em 2018, incluía o Vale do Aço.':'');
+    }
+    if(ORIG[m]) return `<b>${m}</b><br>2025: <b>${fmt(R25[m],2)}%</b><br>Nova macrorregião; em 2018 fazia parte da Macro ${ORIG[m]} (${fmt(R18[ORIG[m]],2)}%).`;
+    const d=R25[m]-R18[m];
+    return `<b>${m}</b><br>2018: <b>${fmt(R18[m],2)}%</b> → 2025: <b>${fmt(R25[m],2)}%</b> (${d>=0?'+':'−'}${fmt(Math.abs(d))} p.p.)`;
+  }
+  function mostra(a){
+    for(const k in svgs) svgs[k].style.display=k===a?'block':'none';
+    document.querySelectorAll('#pdr .seg button').forEach(b=>b.classList.toggle('on',b.dataset.ano===a));
+    det.innerHTML=hint;
+  }
+  document.querySelectorAll('#pdr .seg button').forEach(b=>b.addEventListener('click',()=>mostra(b.dataset.ano)));
+  mostra('2025');
+
+  // lista
+  const linhas=Object.keys(R25).map(m=>{
+    const a=R18[m]; return {m,a,b:R25[m],d:a==null?null:R25[m]-a};
+  }).sort((x,y)=>(y.d??-99)-(x.d??-99));
+  document.getElementById('lstPdr').innerHTML=linhas.map(r=>{
+    let chip;
+    if(r.d==null) chip=`<span class="dl nv">nova</span>`;
+    else if(r.m==='Sul') chip=`<span class="dl nv">dividida</span>`;
+    else if(r.d>0.5) chip=`<span class="dl up">+${fmt(r.d)} p.p.</span>`;
+    else chip=`<span class="dl eq">${r.d>=0?'+':'−'}${fmt(Math.abs(r.d))}*</span>`;
+    const ab=r.a==null?`${fmt(r.b)}%`:`${fmt(r.a)} → <b>${fmt(r.b)}%</b>`;
+    return `<div class="li"><span class="nm"><span class="dot" style="background:${cor(r.b)}"></span>${r.m}</span><span class="ab">${ab}</span>${chip}</div>`;
+  }).join('');
+})();
+
+
+/* ---------- colunas em escala real ---------- */
+document.querySelectorAll('.cols').forEach(c=>{
+  const fs=[...c.querySelectorAll('.cf')];
+  const max=+c.dataset.max||Math.max(...fs.map(f=>+f.dataset.v));
+  const plot=c.querySelector('.plot').clientHeight-22;
+  fs.forEach(f=>{f.dataset.px=Math.max(3,(+f.dataset.v/max)*plot);});
+});
+
+/* ---------- animações e navegação ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return; const t=e.target;
+  if(t.dataset.px) t.style.height=t.dataset.px+'px';
+  if(t.dataset.ring){const a=t.querySelector('.arc'),L=2*Math.PI*34;a.style.transition='stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)';a.style.strokeDashoffset=L*(1-t.dataset.ring/t.dataset.total);}
+  io.unobserve(t);
+}),{threshold:.3});
+document.querySelectorAll('.ring').forEach(r=>{const a=r.querySelector('.arc'),L=2*Math.PI*34;a.style.strokeDasharray=L;a.style.strokeDashoffset=L;});
+document.querySelectorAll('[data-px],[data-ring]').forEach(e=>io.observe(e));
+
+const links=[...document.querySelectorAll('nav a')];
+const spy=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){links.forEach(l=>{const on=l.getAttribute('href')==='#'+e.target.id;l.classList.toggle('on',on);if(on){const c=l.parentElement;c.scrollTo({left:l.offsetLeft-(c.clientWidth-l.offsetWidth)/2,behavior:'smooth'});}});}
+}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section').forEach(s=>spy.observe(s));
+</script>
+</body>
+</html>
