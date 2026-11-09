@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Destaques por município</title>
+<style>
+/*__INTER__*/
+/*__BASE__*/
+
+.filtros {
+    position: sticky; top: .75rem; z-index: 20;
+    display: flex; flex-direction: column; gap: .75rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r-card); padding: 1rem 1.25rem; box-shadow: var(--sh-md);
+}
+.filtros__linha { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.filtros__linha .ses-eyebrow { margin: 0; min-width: 7.5rem; }
+.busca {
+    flex: 1; min-width: 14rem; display: flex; align-items: center; gap: .5rem;
+    background: var(--field); border: 1px solid var(--border);
+    border-radius: var(--r-2xl); padding: .6rem .9rem; color: var(--t-400);
+}
+.busca:focus-within { border-color: var(--ses-green); color: var(--ses-green); }
+.busca svg { width: 18px; height: 18px; flex: none; }
+.busca input {
+    flex: 1; border: 0; outline: 0; background: transparent; min-width: 0;
+    font: 500 .95rem/1.2 Inter, system-ui, sans-serif; color: var(--t-800);
+}
+button.ses-pill { cursor: pointer; font-family: inherit; }
+button.ses-pill:focus-visible { outline: 2px solid var(--ses-green); outline-offset: 2px; }
+
+.grade { display: flex; flex-direction: column; gap: .75rem; }
+.muni {
+    display: grid; align-items: center; gap: 1.5rem;
+    grid-template-columns: 17rem minmax(0, 1fr) 16rem;
+    padding: 1.3rem 1.75rem;
+    scroll-margin-top: 1rem;
+}
+.muni__topo { display: flex; align-items: center; gap: .9rem; min-width: 0; }
+.muni__topo .ses-tile { flex: none; }
+.muni__meio { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+.muni__lado {
+    display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+    gap: .5rem .75rem; align-self: stretch;
+}
+@media (min-width: 901px) {
+    .muni__lado { flex-direction: column; align-items: flex-end; justify-content: flex-start; gap: .5rem; }
+}
+@media (max-width: 900px) {
+    .muni { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem 1.15rem; }
+    .muni__topo { gap: .6rem; }
+    .muni__topo .ses-tile { width: 3rem; height: 3rem; border-radius: var(--r-2xl); }
+    .muni__topo .ses-tile svg { width: 1.5rem; height: 1.5rem; }
+    .muni__nome { font-size: .9375rem; }
+    .filtros { position: static; }
+}
+.muni__nome {
+    margin: 0; font-size: 1.05rem; letter-spacing: -.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+}
+.muni__tema { margin: .2rem 0 0; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--t-500); }
+.muni__entrega-linha { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
+.muni__entrega-linha .ses-chip { padding: .15rem .6rem; font-size: .68rem; }
+.muni__entrega { margin: 0; font-weight: 900; font-size: 1.05rem; line-height: 1.3; color: var(--t-800); letter-spacing: -.01em; }
+.muni__valor { margin: 0; font-weight: 900; font-size: 1.35rem; white-space: nowrap; color: var(--ses-darkblue); letter-spacing: -.025em; }
+.muni__valor small { font-size: .8rem; font-weight: 700; color: var(--t-500); letter-spacing: 0; margin-left: .25rem; }
+.muni__texto { margin: 0; }
+.muni__selos { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
+.selo-origem {
+    display: inline-flex; align-items: center; border-radius: var(--r-full);
+    padding: .2rem .65rem; font-size: .68rem; font-weight: 900; letter-spacing: .08em;
+    text-transform: uppercase; background: var(--field); color: var(--t-600); border: 1px solid var(--border);
+}
+.muni--pendente { border-style: dashed; background: var(--field); }
+.muni--pendente .ses-tile { background: var(--t-300); }
+.muni[hidden] { display: none !important; }
+
+/* ---------- card clicável ---------- */
+.muni-link, .muni-link:hover, .muni-link:visited, .muni-link:active { display: block; color: inherit; text-decoration: none; border-radius: var(--r-card); scroll-margin-top: 1rem; }
+.muni-link[hidden] { display: none !important; }
+.muni-link .muni { position: relative; transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease; padding-right: 3rem; }
+.muni-link:hover .muni { box-shadow: var(--sh-lg); border-color: var(--ses-green); }
+.muni-link:active .muni { transform: scale(.995); }
+.muni-link:focus-visible { outline: 3px solid var(--ses-green); outline-offset: 3px; }
+.muni__seta { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--t-300); display: flex; }
+.muni__seta svg { width: 1.25rem; height: 1.25rem; }
+.muni-link:hover .muni__seta { color: var(--ses-green); }
+@media (max-width: 900px) {
+    .muni-link .muni { padding-right: 2.5rem; }
+    .muni__seta { right: .75rem; top: 1.9rem; transform: none; }
+}
+
+/* ---------- navegação sem JavaScript: a página do município aparece pelo #endereço ---------- */
+.pag { display: none; max-width: 860px; margin: 0 auto; }
+.pag:target { display: block; }
+body:has(.pag:target) .lista-view { display: none; }
+.pag > * + * { margin-top: 1rem; }
+.pag__voltar {
+    display: inline-flex; align-items: center; gap: .4rem; padding: .55rem 1rem .55rem .8rem;
+    border-radius: var(--r-full); background: var(--surface); border: 1px solid var(--border);
+    font-size: .8rem; font-weight: 900; color: var(--t-600); text-decoration: none; box-shadow: var(--sh-sm);
+}
+.pag__voltar:hover { border-color: var(--ses-green); color: var(--ses-green-deep); }
+.pag__voltar svg { width: 1rem; height: 1rem; }
+.pag__hero { padding: 1.5rem; }
+.pag__titulo { margin: 0; font-size: 1.6rem; line-height: 1.15; font-weight: 900; color: #fff; letter-spacing: -.025em; }
+.pag__muni { margin: .2rem 0 0; font-size: 1.2rem; font-weight: 900; color: rgba(255,255,255,.9); letter-spacing: -.02em; }
+.pag__secao { padding: 1.75rem; }
+.pag__secao > * + * { margin-top: 1.1rem; }
+.pag__cab { display: flex; align-items: center; gap: .9rem; }
+.pag__tile { width: 3rem; height: 3rem; background: linear-gradient(135deg, var(--ses-green), var(--ses-green-deep)); }
+.pag__tile svg { width: 1.4rem; height: 1.4rem; }
+.pag__h2 { margin: 0; font-size: 1.4rem; font-weight: 900; color: var(--ses-darkblue); letter-spacing: -.025em; line-height: 1.2; }
+.pag__rotulo { display: flex; align-items: center; gap: .5rem; color: var(--t-400); }
+.pag__rotulo svg { width: 1rem; height: 1rem; flex: none; }
+.pag__rotulo span { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; }
+.pag__rotulo i { flex: 1; height: 1px; background: var(--border); }
+.pag__nota { margin: 0; font-size: .72rem; font-weight: 600; line-height: 1.55; color: var(--t-400); }
+
+/* entregas */
+.ent-lista > * + * { margin-top: .6rem; }
+.ent {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    background: var(--field); border: 1px solid var(--border-soft); border-radius: var(--r-2xl); padding: 1rem 1.15rem;
+}
+.ent--destaque { background: rgba(141,198,63,.10); border-color: rgba(141,198,63,.28); }
+.ent--pendente { border-style: dashed; border-color: var(--border); }
+.ent__corpo { flex: 1 1 18rem; min-width: 0; }
+.ent__topo { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .3rem; }
+.ent__nome { margin: 0; font-size: .95rem; font-weight: 900; color: var(--t-800); letter-spacing: -.01em; line-height: 1.3; }
+.ent__texto { margin: 0; font-size: .78rem; font-weight: 600; line-height: 1.55; color: var(--t-500); }
+.ent--atencao { background: rgba(255,185,0,.12); border-color: rgba(255,185,0,.45); }
+.ent__valor--def { font-size: .85rem; color: var(--t-500); }
+.fes__ultima { margin: .6rem 0 0; font-size: .78rem; font-weight: 700; color: var(--t-500); }
+.fes__ultima b { color: var(--t-800); font-weight: 900; }
+.ent__lado { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; }
+.ent__valor { margin: 0; font-size: 1.15rem; font-weight: 900; color: var(--ses-darkblue); white-space: nowrap; letter-spacing: -.02em; }
+.ent__valor small { font-size: .72rem; font-weight: 700; color: var(--t-500); margin-left: .25rem; letter-spacing: 0; }
+.ent__selos { display: flex; gap: .35rem; flex-wrap: wrap; justify-content: flex-end; }
+.ent .ses-chip { padding: .15rem .6rem; font-size: .68rem; }
+.marca { display: inline-flex; border-radius: var(--r-full); padding: .15rem .55rem; font-size: .66rem; font-weight: 900; background: var(--ses-green); color: #fff; }
+.marca--destaque { background: var(--ses-green-deep); letter-spacing: .06em; text-transform: uppercase; }
+@media (max-width: 600px) {
+    .ent__lado { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
+}
+
+/* comparativo */
+.cmp-leg { display: flex; flex-wrap: wrap; gap: .4rem 1rem; }
+.cmp-leg span { display: inline-flex; align-items: center; gap: .4rem; font-size: .68rem; font-weight: 700; color: var(--t-500); }
+.bola { width: .6rem; height: .6rem; border-radius: 50%; display: inline-block; flex: none; }
+.bola--nom, .cmp__nom { background: #b91c1c; }
+.bola--cor, .cmp__cor { background: #fca5a5; }
+.cmp-lista > * + * { margin-top: .75rem; }
+.cmp { background: var(--field); border: 1px solid var(--border-soft); border-radius: var(--r-3xl); padding: 1.15rem 1.25rem; }
+.cmp > * + * { margin-top: .75rem; }
+.cmp__topo { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+.cmp__titulo { margin: 0; font-size: .9rem; font-weight: 900; color: var(--t-800); }
+.cmp__pills { display: flex; flex-wrap: wrap; gap: .35rem; }
+.pill-x { border-radius: var(--r-full); padding: .25rem .6rem; font-size: .66rem; font-weight: 900; white-space: nowrap; }
+.pill-x--sem { background: var(--ses-yellow); color: #5c3d00; }
+.pill-x--com { background: var(--ses-green); color: #fff; }
+.cmp__leg { display: flex; justify-content: space-between; gap: .75rem; font-size: .72rem; font-weight: 700; color: var(--t-500); margin-bottom: .3rem; }
+.cmp__leg b { color: var(--t-800); font-weight: 900; white-space: nowrap; }
+.cmp__trilho { height: .75rem; border-radius: var(--r-full); background: var(--border); overflow: hidden; }
+.cmp__trilho--flex { display: flex; }
+.cmp__at { height: 100%; border-radius: var(--r-full); background: var(--ses-green); }
+.cmp__nom, .cmp__cor { height: 100%; }
+.cmp--vazio .cmp__nota { margin: 0; font-size: .75rem; font-weight: 700; color: var(--t-400); }
+
+/* investimento total */
+.kpi-total { position: relative; overflow: hidden; border-radius: var(--r-3xl); padding: 1.4rem 1.5rem;
+    background: linear-gradient(135deg, var(--ses-green), var(--ses-green-deep)); box-shadow: var(--sh-md); }
+.kpi-total__rot { margin: 0 0 .4rem; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .2em; color: rgba(255,255,255,.75); }
+.kpi-total__val { margin: 0; font-size: 2.6rem; line-height: 1; font-weight: 900; color: #fff; letter-spacing: -.03em; }
+.gr { display: flex; align-items: stretch; gap: .5rem; height: 12rem; padding-top: .25rem; border-bottom: 1px solid var(--border); }
+.gr__col { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; }
+.gr__val { font-size: .68rem; font-weight: 800; color: var(--t-600); margin-bottom: .25rem; white-space: nowrap; }
+.gr__barra { width: 100%; max-width: 3.25rem; background: var(--ses-green); border-radius: 4px 4px 0 0; }
+.gr__barra--parcial { background: repeating-linear-gradient(135deg, var(--ses-lightgreen) 0 5px, #d6e98f 5px 9px); }
+.gr__col:hover .gr__barra { filter: brightness(.92); }
+.gr__ano { position: absolute; bottom: -1.55rem; font-size: .66rem; font-weight: 800; color: var(--t-500); text-align: center; line-height: 1.1; }
+.gr__ano small { display: block; font-size: .56rem; font-weight: 700; color: var(--t-400); }
+.gr + .pag__nota { margin-top: 2.4rem; }
+.fes { background: var(--field); border-radius: var(--r-3xl); padding: 1.1rem 1.25rem; }
+.fes__leg { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .3rem .75rem; font-size: .75rem; font-weight: 700; color: var(--t-500); margin-bottom: .5rem; }
+.fes__leg b { color: var(--t-800); font-weight: 900; }
+.fes__trilho { height: .75rem; border-radius: var(--r-full); background: var(--border-soft); border: 1px solid var(--border); overflow: hidden; }
+.fes__fill { height: 100%; background: var(--ses-green); border-radius: var(--r-full); }
+.fes__pct { margin: .45rem 0 0; text-align: right; font-size: .72rem; font-weight: 900; color: var(--t-500); }
+
+@media (max-width: 600px) {
+    .pag__secao { padding: 1.35rem 1.15rem; }
+    .pag__titulo { font-size: 1.3rem; }
+    .pag__muni { font-size: 1.05rem; }
+    .pag__h2 { font-size: 1.2rem; }
+    .kpi-total__val { font-size: 2.1rem; }
+    .gr { gap: .3rem; height: 10rem; }
+    .gr__val { font-size: .6rem; }
+    .gr__ano { font-size: .6rem; }
+}
+
+
+@media print {
+    body { background: #fff; }
+    .filtros { display: none !important; }
+    body:has(.pag:target) .lista-view, .pag__voltar { display: none !important; }
+    .pag__secao { break-inside: avoid; }
+    .ses-card, .muni { break-inside: avoid; box-shadow: none !important; }
+    .ses-hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<div class="ses-pagina">
+<div class="lista-view ses-stack">
+
+<div class="ses-hero">
+    <div class="ses-onda"></div>
+    <div class="ses-orbe ses-orbe--clara"></div>
+    <div class="ses-orbe ses-orbe--escura"></div>
+    <div class="ses-hero__conteudo">
+        <div class="ses-hero__titulo">
+            <div class="ses-glass"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div style="min-width:0">
+                <p class="ses-eyebrow ses-eyebrow--claro">SES-MG · AEST</p>
+                <h1 class="ses-titulo-tela">Destaques por município</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="filtros" role="search">
+    <div class="filtros__linha">
+        <label class="busca">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="busca" type="search" placeholder="Ou busque por nome" aria-label="Buscar município">
+        </label>
+    </div>
+</div>
+
+<div id="lista" class="ses-stack"><div class="grade">
+/*__CARDS__*/
+</div></div>
+
+<div class="ses-vazio" id="vazio" hidden>
+    <div class="ses-vazio__tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+    <p>Nenhum município encontrado para a busca.</p>
+</div>
+
+</div>
+/*__PAGINAS__*/
+</div>
+
+<script>
+(function () {
+    // Todos os cards e páginas já estão prontos no HTML (funcionam sem JavaScript).
+    // Este script só liga a busca por nome de município por cima deles.
+    var cartoes = Array.prototype.slice.call(document.querySelectorAll('#lista a.muni-link'));
+
+    function semAcento(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+
+    function atualizar(q) {
+        q = semAcento(q.trim());
+        var visiveis = 0;
+        cartoes.forEach(function (el) {
+            var ok = !q || el.dataset.nome.indexOf(q) !== -1;
+            el.hidden = !ok;
+            if (ok) visiveis++;
+        });
+        document.getElementById('vazio').hidden = visiveis > 0;
+    }
+    var campo = document.getElementById('busca');
+    ['input', 'keyup', 'change', 'search', 'paste'].forEach(function (ev) {
+        campo.addEventListener(ev, function (e) { atualizar(e.target.value); });
+    });
+    atualizar('');
+})();
+</script>
+</body>
+</html>
