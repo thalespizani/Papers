@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saúde em Minas Gerais — Entregas e Investimentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'ses-green': '#8dc63f',
+        'ses-lightgreen': '#b2d235',
+        'ses-blue': '#007fb6',
+        'ses-darkblue': '#005b8e',
+        'ses-lightblue': '#5ab0d8',
+        'ses-orange': '#f58220',
+        'ses-darkorange': '#d96c14',
+        'ses-yellow': '#fdb913'
+      },
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  body { background: #f4f7f9; font-family: 'Inter', system-ui, sans-serif; }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  /* ---------- A onda institucional ---------- */
+  .wave-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'><path fill='%23ffffff' fill-opacity='0.14' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,208C960,192,1056,160,1152,160C1248,160,1344,192,1392,208L1440,224L1440,320L0,320Z'></path></svg>");
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% 62%;
+  }
+  .wave-tide .wave-overlay { transition: background-position .7s ease-out; }
+  .wave-tide:hover .wave-overlay { background-position: bottom right; }
+
+  .bg-grid-white {
+    background-image: radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* ---------- Entrada ---------- */
+  .fade-in { animation: fadeIn .45s ease-out both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Balão de mouse-over ---------- */
+  #global-tip {
+    position: fixed; z-index: 90; background: #1e293b; color: #fff;
+    font-size: 11px; line-height: 1.45; font-weight: 600;
+    padding: 7px 11px; border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.22);
+    max-width: min(340px, 100vw - 16px);
+    white-space: pre-line; overflow-wrap: anywhere;
+    opacity: 0; pointer-events: none; transition: opacity .12s ease;
+  }
+  #global-tip.tip-on { opacity: 1; }
+  #global-tip::after {
+    content: ''; position: absolute; left: var(--tip-arrow, 50%);
+    transform: translateX(-50%); border: 5px solid transparent;
+    border-top-color: #1e293b; top: 100%;
+  }
+  #global-tip.tip-below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: #1e293b; }
+
+  /* ---------- Barras ---------- */
+  .bar { height: 8px; border-radius: 9999px; background: linear-gradient(90deg, #b2d235, #8dc63f); }
+  .bar-orange { height: 8px; border-radius: 9999px; background: linear-gradient(90deg, #fdb913, #f58220); }
+  .bar-blue { height: 8px; border-radius: 9999px; background: linear-gradient(90deg, #5ab0d8, #007fb6); }
+  .bar-track { background: #eef2f5; border-radius: 9999px; height: 8px; }
+
+  /* ---------- Tabelas ---------- */
+  table { border-collapse: collapse; width: 100%; }
+  thead th {
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em;
+    color: #94a3b8; padding: 0 12px 10px; text-align: right; white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; }
+  tbody td { padding: 11px 12px; text-align: right; font-size: 13px; font-weight: 800; color: #334155; border-top: 1px solid #f1f5f9; }
+  tbody td:first-child { text-align: left; font-size: 12px; font-weight: 700; color: #64748b; }
+  tbody tr.total td { background: #f8fafc; color: #1e293b; font-weight: 900; border-top: 2px solid #e2e8f0; }
+  tbody tr.total td:first-child { color: #1e293b; text-transform: uppercase; font-size: 10px; letter-spacing: .1em; font-weight: 900; }
+  tbody tr:hover td { background: #fbfdfa; }
+  tbody tr.total:hover td { background: #f4f7f9; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { animation: none; }
+    .wave-tide .wave-overlay { transition: none; }
+    .wave-tide:hover .wave-overlay { background-position: bottom center; }
+    * { transition-duration: .01ms !important; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body class="text-slate-600">
+
+<div class="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="fade-in space-y-6">
+
+    <!-- ================= HERO ================= -->
+    <div class="relative overflow-hidden rounded-[40px] shadow-md bg-gradient-to-br from-ses-green to-[#4f7a24] p-8 sm:p-12 wave-tide">
+      <div class="wave-overlay"></div>
+      <div class="absolute inset-0 bg-grid-white opacity-60 pointer-events-none"></div>
+      <div class="absolute -right-16 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-10 -bottom-16 w-48 h-48 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 flex items-center gap-5 min-w-0">
+        <div class="bg-white/20 backdrop-blur-md border border-white/25 text-white p-4 rounded-2xl shadow-inner shrink-0">
+          <i data-lucide="heart-pulse" class="w-8 h-8"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-[0.25em] mb-1">Secretaria de Estado de Saúde de Minas Gerais · SES-MG</p>
+          <h1 class="text-4xl sm:text-5xl font-black text-white tracking-tight drop-shadow-sm">Entregas e Investimentos</h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= NAVEGAÇÃO ================= -->
+    <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-4 sm:p-5 no-print">
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <a href="#samu" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-ses-green text-white border-ses-green shadow-md">SAMU</a>
+        <a href="#ubs" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-white text-slate-500 border-slate-200 hover:border-slate-300">UBS</a>
+        <a href="#opera" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-white text-slate-500 border-slate-200 hover:border-slate-300">Opera Mais</a>
+        <a href="#valora" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-white text-slate-500 border-slate-200 hover:border-slate-300">Valora Minas</a>
+        <a href="#equipamentos" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-white text-slate-500 border-slate-200 hover:border-slate-300">Equipamentos</a>
+        <a href="#hope" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-white text-slate-500 border-slate-200 hover:border-slate-300">HoPE</a>
+        <a href="#hospitais-regionais" class="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm bg-white text-slate-500 border-slate-200 hover:border-slate-300">Hospitais Regionais</a>
+      </div>
+    </div>
+
+    <!-- ================= 1. SAMU ================= -->
+    <section id="samu" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="siren" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 01</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">SAMU</h2>
+        </div>
+      </div>
+
+      <p class="text-sm font-medium leading-relaxed text-slate-600">O ano de 2025 consolidou a universalização do SAMU 192, que passou a cobrir 100% da população mineira. O serviço custa R$ 460 milhões/ano.</p>
+
+      <!-- Custeio -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="wallet" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Custeio do SAMU · R$ milhões</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="tnum">
+            <thead>
+              <tr>
+                <th>Ano</th>
+                <th>SAMU Regional (Estadual + Federal)</th>
+                <th>SAMU Municipal (Estadual)</th>
+                <th>Total (Reg. + Mun.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>2021</td><td>229,3</td><td>12,2</td><td>241,5</td></tr>
+              <tr><td>2022</td><td>285,6</td><td>16,6</td><td>302,2</td></tr>
+              <tr><td>2023</td><td>386,8</td><td>16,9</td><td>403,7</td></tr>
+              <tr><td>2024</td><td>443,4</td><td>2,6</td><td>446,0</td></tr>
+              <tr><td>2025</td><td>464,3</td><td>2,3</td><td>466,6</td></tr>
+              <tr class="total"><td>Total 2021–2025</td><td>1.809,4</td><td>50,6</td><td>1.860,0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- barras -->
+        <div class="mt-6 bg-slate-50 rounded-3xl p-5 space-y-3">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Evolução do custeio total</p>
+          <div class="flex items-center gap-3"><span class="w-12 text-[11px] font-black text-slate-500 tnum shrink-0">2021</span><div class="flex-1 bar-track"><div class="bar" style="width:51.8%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">R$ 241,5 mi</span></div>
+          <div class="flex items-center gap-3"><span class="w-12 text-[11px] font-black text-slate-500 tnum shrink-0">2022</span><div class="flex-1 bar-track"><div class="bar" style="width:64.8%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">R$ 302,2 mi</span></div>
+          <div class="flex items-center gap-3"><span class="w-12 text-[11px] font-black text-slate-500 tnum shrink-0">2023</span><div class="flex-1 bar-track"><div class="bar" style="width:86.5%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">R$ 403,7 mi</span></div>
+          <div class="flex items-center gap-3"><span class="w-12 text-[11px] font-black text-slate-500 tnum shrink-0">2024</span><div class="flex-1 bar-track"><div class="bar" style="width:95.6%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">R$ 446,0 mi</span></div>
+          <div class="flex items-center gap-3"><span class="w-12 text-[11px] font-black text-slate-500 tnum shrink-0">2025</span><div class="flex-1 bar-track"><div class="bar" style="width:100%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">R$ 466,6 mi</span></div>
+        </div>
+      </div>
+
+      <!-- Investimentos -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Investimentos · R$ milhões</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="tnum">
+            <thead>
+              <tr><th>Programa</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SAMU</td><td>—</td><td>26,7</td><td>35,7</td><td>23,5</td><td>85,9</td></tr>
+              <tr><td>SAAV</td><td>8,1</td><td>21,0</td><td>228,0</td><td>11,0</td><td>268,1</td></tr>
+              <tr class="total"><td>Total investido</td><td>8,1</td><td>47,7</td><td>263,7</td><td>34,5</td><td>354,0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Frota e cobertura -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="ambulance" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Frota e cobertura</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">USB</p>
+            <p class="text-2xl font-black text-slate-800 tnum">430</p>
+            <p class="text-[11px] font-medium text-slate-500 mt-0.5">Suporte básico</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">USA</p>
+            <p class="text-2xl font-black text-slate-800 tnum">114</p>
+            <p class="text-[11px] font-medium text-slate-500 mt-0.5">Suporte avançado</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Aeronaves SAAV</p>
+            <p class="text-2xl font-black text-slate-800 tnum">10</p>
+            <p class="text-[11px] font-medium text-slate-500 mt-0.5">Disponíveis hoje</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+            <div><p class="text-2xl font-black text-slate-800 tnum leading-none">346</p><p class="text-[11px] font-bold text-slate-500 mt-1">Municípios com base do SAMU</p></div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="layout-grid" class="w-5 h-5"></i></div>
+            <div><p class="text-2xl font-black text-slate-800 tnum leading-none">16 <span class="text-sm text-ses-green">100%</span></p><p class="text-[11px] font-bold text-slate-500 mt-1">Macrorregiões de saúde cobertas</p></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2. UBS ================= -->
+    <section id="ubs" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="hospital" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 02</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">UBS — Unidades Básicas de Saúde</h2>
+        </div>
+      </div>
+
+      <p class="text-sm font-medium leading-relaxed text-slate-600">A gestão priorizou o financiamento de mais de 400 obras de Unidades Básicas de Saúde (UBS). Atualmente, a cobertura das equipes de saúde da família supera 98% do território estadual e ultrapassa os 106%, se considerarmos as obras em andamento e as que estão prontas, aguardando habilitação do Ministério da Saúde. A meta é alcançar a universalização da cobertura da Atenção Primária até o final de 2026.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ses-green to-[#4f7a24] p-6 shadow-md">
+          <div class="absolute -right-8 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-[0.25em] mb-2">UBS entregues</p>
+          <p class="text-5xl font-black text-white tnum tracking-tight">253</p>
+          <p class="text-xs font-bold text-white/80 mt-2">Unidades concluídas</p>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">UBS financiadas</p>
+          <p class="text-4xl font-black text-slate-800 tnum tracking-tight">434</p>
+          <p class="text-xs font-bold text-slate-500 mt-2">Total financiado pelo Governo de Minas</p>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Investimento em construção</p>
+          <p class="text-3xl font-black text-slate-800 tnum tracking-tight">R$ 677,9 <span class="text-base text-slate-400">mi</span></p>
+          <p class="text-xs font-bold text-slate-500 mt-2">Total investido</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. OPERA MAIS ================= -->
+    <section id="opera" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="stethoscope" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 03</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">Opera Mais</h2>
+        </div>
+      </div>
+
+      <p class="text-sm font-medium leading-relaxed text-slate-600">O programa Opera Mais resultou em um crescimento de quase 100% na realização de cirurgias eletivas. Em 2025, Minas Gerais atingiu a marca de 1,1 milhão de procedimentos, contra 593 mil realizados em 2018. O avanço é sustentado pelo uso estratégico de incentivos financeiros do Tesouro Estadual.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-6">
+          <div class="flex items-center gap-3 pb-4">
+            <div class="flex items-center gap-2 text-slate-400">
+              <i data-lucide="activity" class="w-4 h-4"></i>
+              <span class="text-[10px] font-black uppercase tracking-widest">Cirurgias eletivas realizadas · em mil (total, não apenas rol do Opera)</span>
+            </div>
+            <span class="flex-1 h-px bg-slate-200"></span>
+          </div>
+          <div class="bg-slate-50 rounded-3xl p-5 space-y-3">
+            <div class="flex items-center gap-3"><span class="w-24 text-[11px] font-black text-slate-500 tnum shrink-0">2018</span><div class="flex-1 bar-track"><div class="bar-orange" style="width:53.9%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">593</span></div>
+            <div class="flex items-center gap-3"><span class="w-24 text-[11px] font-black text-slate-500 tnum shrink-0">2022</span><div class="flex-1 bar-track"><div class="bar" style="width:61.6%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">677</span></div>
+            <div class="flex items-center gap-3"><span class="w-24 text-[11px] font-black text-slate-500 tnum shrink-0">2023</span><div class="flex-1 bar-track"><div class="bar" style="width:74.8%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">823</span></div>
+            <div class="flex items-center gap-3"><span class="w-24 text-[11px] font-black text-slate-500 tnum shrink-0">2024</span><div class="flex-1 bar-track"><div class="bar" style="width:88.1%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">970</span></div>
+            <div class="flex items-center gap-3"><span class="w-24 text-[11px] font-black text-slate-500 tnum shrink-0">2025</span><div class="flex-1 bar-track"><div class="bar" style="width:100%"></div></div><span class="w-24 text-right text-xs font-black text-slate-700 tnum shrink-0">1.100</span></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="flex items-center gap-3 pb-4">
+            <div class="flex items-center gap-2 text-slate-400">
+              <i data-lucide="banknote" class="w-4 h-4"></i>
+              <span class="text-[10px] font-black uppercase tracking-widest">Valor financiado pelo Opera Mais</span>
+            </div>
+            <span class="flex-1 h-px bg-slate-200"></span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="tnum">
+              <thead><tr><th>Ano</th><th>Valor (R$)</th></tr></thead>
+              <tbody>
+                <tr><td>2021</td><td>45.743.809,11</td></tr>
+                <tr><td>2022</td><td>113.217.123,46</td></tr>
+                <tr><td>2023</td><td>333.630.615,96</td></tr>
+                <tr><td>2024</td><td>520.791.875,03</td></tr>
+                <tr><td>2025</td><td>510.215.300,99</td></tr>
+                <tr><td>2026 <span class="text-slate-400">(parcial)</span></td><td>170.352.296,40</td></tr>
+                <tr class="total"><td>Total</td><td>1.693.951.020,95</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4. VALORA MINAS ================= -->
+    <section id="valora" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="building-2" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 04</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">Valora Minas</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-6">
+          <div class="overflow-x-auto">
+            <table class="tnum">
+              <thead><tr><th>Ano</th><th>Hospitais financiados</th><th>Valor financiado (R$)</th></tr></thead>
+              <tbody>
+                <tr><td>2021</td><td>154</td><td>184.295.050,95</td></tr>
+                <tr><td>2022</td><td>161</td><td>1.110.152.240,99</td></tr>
+                <tr><td>2023</td><td>162</td><td>1.533.174.653,21</td></tr>
+                <tr><td>2024</td><td>178</td><td>1.915.863.827,53</td></tr>
+                <tr><td>2025</td><td>169</td><td>2.027.732.243,22</td></tr>
+                <tr><td>2026 <span class="text-slate-400">(parcial)</span></td><td>181</td><td>1.322.593.199,53</td></tr>
+                <tr class="total"><td>Total</td><td>—</td><td>8.093.811.215,43</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="lg:col-span-6">
+          <div class="flex items-center gap-3 pb-4">
+            <div class="flex items-center gap-2 text-slate-400">
+              <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+              <span class="text-[10px] font-black uppercase tracking-widest">Evolução do valor financiado</span>
+            </div>
+            <span class="flex-1 h-px bg-slate-200"></span>
+          </div>
+          <div class="bg-slate-50 rounded-3xl p-5 space-y-3">
+            <div class="flex items-center gap-3"><span class="w-16 text-[11px] font-black text-slate-500 tnum shrink-0">2021</span><div class="flex-1 bar-track"><div class="bar" style="width:9.1%"></div></div><span class="w-20 text-right text-xs font-black text-slate-700 tnum shrink-0">0,18 bi</span></div>
+            <div class="flex items-center gap-3"><span class="w-16 text-[11px] font-black text-slate-500 tnum shrink-0">2022</span><div class="flex-1 bar-track"><div class="bar" style="width:54.8%"></div></div><span class="w-20 text-right text-xs font-black text-slate-700 tnum shrink-0">1,11 bi</span></div>
+            <div class="flex items-center gap-3"><span class="w-16 text-[11px] font-black text-slate-500 tnum shrink-0">2023</span><div class="flex-1 bar-track"><div class="bar" style="width:75.6%"></div></div><span class="w-20 text-right text-xs font-black text-slate-700 tnum shrink-0">1,53 bi</span></div>
+            <div class="flex items-center gap-3"><span class="w-16 text-[11px] font-black text-slate-500 tnum shrink-0">2024</span><div class="flex-1 bar-track"><div class="bar" style="width:94.5%"></div></div><span class="w-20 text-right text-xs font-black text-slate-700 tnum shrink-0">1,92 bi</span></div>
+            <div class="flex items-center gap-3"><span class="w-16 text-[11px] font-black text-slate-500 tnum shrink-0">2025</span><div class="flex-1 bar-track"><div class="bar" style="width:100%"></div></div><span class="w-20 text-right text-xs font-black text-slate-700 tnum shrink-0">2,03 bi</span></div>
+            <div class="flex items-center gap-3"><span class="w-16 text-[11px] font-black text-slate-500 tnum shrink-0">2026</span><div class="flex-1 bar-track"><div class="bar" style="width:65.2%"></div></div><span class="w-20 text-right text-xs font-black text-slate-700 tnum shrink-0">1,32 bi</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ses-blue to-ses-darkblue p-5 flex items-start gap-4 shadow-md">
+        <div class="absolute -right-10 -top-12 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md border border-white/25 text-white flex items-center justify-center shrink-0">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <div class="relative z-10">
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-widest mb-1">Atenção</p>
+          <p class="text-sm font-bold text-white leading-relaxed">O Valora Minas contempla o Opera Mais. Os valores dos dois programas não devem ser somados.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. EQUIPAMENTOS ================= -->
+    <section id="equipamentos" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="scan-line" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 05</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">Equipamentos entregues</h2>
+        </div>
+      </div>
+
+      <p class="text-sm font-medium leading-relaxed text-slate-600">Consideramos para o portfólio dados de 2023 a 2026 (parcial), com exceção dos equipamentos da rede hospitalar, cujas informações disponíveis se iniciam em 2021. Não foram considerados neste cálculo mamógrafos, tomógrafos ou os transportes financiados com recursos do portfólio.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ses-green to-[#4f7a24] p-6 shadow-md">
+          <div class="absolute -right-8 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-[0.25em] mb-2">Portfólio de investimentos</p>
+          <p class="text-3xl font-black text-white tnum tracking-tight">≈ R$ 700 <span class="text-lg text-white/70">milhões</span></p>
+          <p class="text-xs font-bold text-white/80 mt-2">Total investido</p>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Kits e/ou equipamentos</p>
+          <p class="text-4xl font-black text-slate-800 tnum tracking-tight">3.306</p>
+          <p class="text-xs font-bold text-slate-500 mt-2">Financiados no portfólio</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <div class="flex items-center gap-3 pb-4">
+            <div class="flex items-center gap-2 text-slate-400">
+              <i data-lucide="scan-search" class="w-4 h-4"></i>
+              <span class="text-[10px] font-black uppercase tracking-widest">Tomógrafos por macrorregião</span>
+            </div>
+            <span class="flex-1 h-px bg-slate-200"></span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="tnum">
+              <thead><tr><th>Macrorregião</th><th>Tomógrafos</th><th>Investimento (R$)</th></tr></thead>
+              <tbody>
+                <tr><td>Centro</td><td>15</td><td>23.103.915</td></tr>
+                <tr><td>Centro Sul</td><td>3</td><td>4.620.783</td></tr>
+                <tr><td>Extremo Sul</td><td>5</td><td>7.701.305</td></tr>
+                <tr><td>Jequitinhonha</td><td>3</td><td>4.620.783</td></tr>
+                <tr><td>Leste</td><td>2</td><td>3.080.522</td></tr>
+                <tr><td>Leste do Sul</td><td>6</td><td>9.241.566</td></tr>
+                <tr><td>Nordeste</td><td>9</td><td>13.862.349</td></tr>
+                <tr><td>Noroeste</td><td>3</td><td>4.620.783</td></tr>
+                <tr><td>Norte</td><td>10</td><td>15.402.610</td></tr>
+                <tr><td>Oeste</td><td>8</td><td>12.322.088</td></tr>
+                <tr><td>Sudeste</td><td>11</td><td>16.942.871</td></tr>
+                <tr><td>Sudoeste</td><td>7</td><td>10.781.827</td></tr>
+                <tr><td>Sul</td><td>4</td><td>6.161.044</td></tr>
+                <tr><td>Triângulo do Norte</td><td>4</td><td>6.161.044</td></tr>
+                <tr><td>Triângulo do Sul</td><td>3</td><td>4.620.783</td></tr>
+                <tr><td>Vale do Aço</td><td>5</td><td>7.701.305</td></tr>
+                <tr class="total"><td>Total</td><td>98</td><td>150.945.578</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-3 pb-4">
+            <div class="flex items-center gap-2 text-slate-400">
+              <i data-lucide="scan" class="w-4 h-4"></i>
+              <span class="text-[10px] font-black uppercase tracking-widest">Mamógrafos por macrorregião</span>
+            </div>
+            <span class="flex-1 h-px bg-slate-200"></span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="tnum">
+              <thead><tr><th>Macrorregião</th><th>Mamógrafos</th></tr></thead>
+              <tbody>
+                <tr><td>Centro</td><td>14</td></tr>
+                <tr><td>Centro Sul</td><td>1</td></tr>
+                <tr><td>Extremo Sul</td><td>1</td></tr>
+                <tr><td>Jequitinhonha</td><td>2</td></tr>
+                <tr><td>Leste</td><td>5</td></tr>
+                <tr><td>Leste do Sul</td><td>4</td></tr>
+                <tr><td>Nordeste</td><td>2</td></tr>
+                <tr><td>Noroeste</td><td>2</td></tr>
+                <tr><td>Norte</td><td>6</td></tr>
+                <tr><td>Oeste</td><td>2</td></tr>
+                <tr><td>Sudeste</td><td>8</td></tr>
+                <tr><td>Sudoeste</td><td>5</td></tr>
+                <tr><td>Sul</td><td>2</td></tr>
+                <tr><td>Triângulo do Norte</td><td>5</td></tr>
+                <tr><td>Triângulo do Sul</td><td>4</td></tr>
+                <tr><td>Vale do Aço</td><td>0</td></tr>
+                <tr class="total"><td>Total</td><td>63</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="scan" class="w-5 h-5"></i></div>
+          <div><p class="text-2xl font-black text-slate-800 tnum leading-none">63</p><p class="text-[11px] font-bold text-slate-500 mt-1">Mamógrafos entregues</p></div>
+        </div>
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="scan-search" class="w-5 h-5"></i></div>
+          <div><p class="text-2xl font-black text-slate-800 tnum leading-none">98</p><p class="text-[11px] font-bold text-slate-500 mt-1">Tomógrafos entregues · R$ 150.945.578,00</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6. HOPE ================= -->
+    <section id="hope" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="landmark" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 06</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">Complexo de Saúde Hospitalar Padre Eustáquio (HoPE)</h2>
+        </div>
+      </div>
+
+      <p class="text-sm font-medium leading-relaxed text-slate-600">O Complexo de Saúde HoPE é uma Parceria Público-Privada (PPP) em concessão administrativa, estruturada pelo Governo de Minas Gerais (Fhemig, Funed, SES-MG, Seinfra e Codemge). O edital foi publicado em junho de 2025, com leilão na B3 em setembro de 2025 e vitória do Consórcio Saúde HoPE. O contrato foi assinado em junho de 2026, com prazo de 30 anos e valor estimado de R$ 2,1 bilhões, cobrindo construção, equipagem, manutenção e serviços não finalísticos. A assistência médica e sanitária permanece 100% pública e gratuita pelo SUS.</p>
+
+      <!-- Números do contrato -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="file-signature" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">O contrato em números</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Valor estimado</p>
+            <p class="text-2xl font-black text-slate-800 tnum">R$ 2,1 <span class="text-base text-slate-400">bi</span></p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Prazo do contrato</p>
+            <p class="text-2xl font-black text-slate-800 tnum">30 <span class="text-base text-slate-400">anos</span></p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Leitos</p>
+            <p class="text-2xl font-black text-slate-800 tnum">532</p>
+            <p class="text-[11px] font-medium text-slate-500 mt-0.5">Dos quais 110 de UTI</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Salas cirúrgicas</p>
+            <p class="text-2xl font-black text-slate-800 tnum">13</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Internações anuais</p>
+            <p class="text-2xl font-black text-slate-800 tnum">+60%</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Exames laboratoriais</p>
+            <p class="text-2xl font-black text-slate-800 tnum">1,5 <span class="text-base text-slate-400">mi/ano</span></p>
+            <p class="text-[11px] font-medium text-slate-500 mt-0.5">Capacidade do Lacen-MG</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Análises sanitárias</p>
+            <p class="text-2xl font-black text-slate-800 tnum">375 <span class="text-base text-slate-400">mil/ano</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unidades centralizadas -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="building" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Unidades centralizadas</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex items-center gap-3 bg-slate-50 rounded-2xl p-3.5 border border-slate-100">
+            <div class="w-9 h-9 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="cross" class="w-4 h-4"></i></div>
+            <p class="text-xs font-bold text-slate-700">Hospital Alberto Cavalcanti</p>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-2xl p-3.5 border border-slate-100">
+            <div class="w-9 h-9 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="cross" class="w-4 h-4"></i></div>
+            <p class="text-xs font-bold text-slate-700">Hospital Infantil João Paulo II</p>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-2xl p-3.5 border border-slate-100">
+            <div class="w-9 h-9 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="cross" class="w-4 h-4"></i></div>
+            <p class="text-xs font-bold text-slate-700">Hospital Eduardo de Menezes</p>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-2xl p-3.5 border border-slate-100">
+            <div class="w-9 h-9 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="cross" class="w-4 h-4"></i></div>
+            <p class="text-xs font-bold text-slate-700">Maternidade Odete Valadares</p>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-2xl p-3.5 border border-slate-100 sm:col-span-2">
+            <div class="w-9 h-9 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="flask-conical" class="w-4 h-4"></i></div>
+            <p class="text-xs font-bold text-slate-700">Lacen-MG/Funed — Laboratório Central de Saúde Pública</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cronograma contratual -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="calendar-range" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Cronograma contratual</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 sm:p-8 shadow-inner overflow-x-auto">
+          <div class="flex items-start flex-nowrap min-w-[560px]">
+            <div class="flex-1 min-w-[130px]">
+              <div class="flex items-center">
+                <div class="w-3.5 h-3.5 rounded-full bg-ses-green border-2 border-white shadow shrink-0 z-10"></div>
+                <div class="flex-1 h-0.5 bg-slate-200"></div>
+              </div>
+              <p class="text-xs font-black text-slate-800 mt-3 whitespace-nowrap">Planejamento</p>
+              <p class="text-[11px] font-bold text-slate-400 tnum">2026–2027</p>
+            </div>
+            <div class="flex-1 min-w-[130px]">
+              <div class="flex items-center">
+                <div class="w-3.5 h-3.5 rounded-full bg-ses-green border-2 border-white shadow shrink-0 z-10"></div>
+                <div class="flex-1 h-0.5 bg-slate-200"></div>
+              </div>
+              <p class="text-xs font-black text-slate-800 mt-3 whitespace-nowrap">Construção</p>
+              <p class="text-[11px] font-bold text-slate-400 tnum">2027–2030</p>
+            </div>
+            <div class="flex-1 min-w-[130px]">
+              <div class="flex items-center">
+                <div class="w-3.5 h-3.5 rounded-full bg-ses-green border-2 border-white shadow shrink-0 z-10"></div>
+                <div class="flex-1 h-0.5 bg-slate-200"></div>
+              </div>
+              <p class="text-xs font-black text-slate-800 mt-3 whitespace-nowrap">Operação parcial</p>
+              <p class="text-[11px] font-bold text-slate-400 tnum">2030–2031</p>
+            </div>
+            <div class="shrink-0 min-w-[130px]">
+              <div class="flex items-center">
+                <div class="w-3.5 h-3.5 rounded-full bg-ses-green border-2 border-white shadow shrink-0 z-10"></div>
+              </div>
+              <p class="text-xs font-black text-slate-800 mt-3 whitespace-nowrap">Operação plena</p>
+              <p class="text-[11px] font-bold text-slate-400 tnum">2031–2056</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="calendar-check" class="w-5 h-5"></i></div>
+            <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Eficácia prevista</p><p class="text-sm font-black text-slate-800 tnum">Dez/2026</p></div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="hard-hat" class="w-5 h-5"></i></div>
+            <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Conclusão das obras</p><p class="text-sm font-black text-slate-800 tnum">2030</p></div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-ses-green/15 text-ses-green flex items-center justify-center shrink-0"><i data-lucide="check-circle-2" class="w-5 h-5"></i></div>
+            <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Plena operação</p><p class="text-sm font-black text-slate-800 tnum">Até 2031</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. HOSPITAIS REGIONAIS ================= -->
+    <section id="hospitais-regionais" class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-10 space-y-8 scroll-mt-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md relative overflow-hidden shrink-0">
+          <div class="absolute -right-2 -top-3 w-9 h-9 bg-white/15 rounded-full pointer-events-none"></div>
+          <i data-lucide="building" class="w-7 h-7 text-white relative z-10"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tema 07</p>
+          <h2 class="text-3xl font-black text-ses-darkblue tracking-tight">Hospitais Regionais</h2>
+        </div>
+      </div>
+
+      <p class="text-sm font-medium leading-relaxed text-slate-600">Cinco hospitais regionais compõem a expansão da rede hospitalar estadual. Divinópolis e Teófilo Otoni já estão em operação parcial, com abertura total prevista para os próximos anos.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ses-green to-[#4f7a24] p-6 shadow-md flex flex-col">
+          <div class="absolute -right-8 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-[0.25em] mb-2">Hospitais em operação</p>
+          <p class="text-5xl font-black text-white tnum tracking-tight">2 <span class="text-lg text-white/70">de 5</span></p>
+          <p class="text-xs font-bold text-white/80 mt-2 pr-10">Divinópolis e Teófilo Otoni em operação</p>
+          <svg viewBox="0 0 32 32" class="absolute bottom-5 right-5 w-9 h-9 z-10" aria-label="2 de 5 hospitais em operação">
+            <path d="M16,16 L23.05,25.71 A12,12 0 0,1 8.95,25.71 Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M16,16 L8.95,25.71 A12,12 0 0,1 4.59,12.29 Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M16,16 L4.59,12.29 A12,12 0 0,1 16,4 Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M16,16 L16,4 A12,12 0 0,1 27.41,12.29 Z" fill="#ffffff" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M16,16 L27.41,12.29 A12,12 0 0,1 23.05,25.71 Z" fill="#ffffff" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Leitos previstos</p>
+          <p class="text-4xl font-black text-slate-800 tnum tracking-tight">1.231</p>
+          <p class="text-xs font-bold text-slate-500 mt-2">Nos 5 hospitais regionais</p>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Investimento (obra + equipagem)</p>
+          <p class="text-3xl font-black text-slate-800 tnum tracking-tight">R$ 737,5 <span class="text-base text-slate-400">mi</span></p>
+          <p class="text-xs font-bold text-slate-500 mt-2">Nos 5 hospitais regionais</p>
+        </div>
+      </div>
+
+      <!-- Investimento e execução financeira -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="wallet" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Investimento e execução financeira</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="tnum">
+            <thead>
+              <tr><th>Hospital</th><th>Previsto</th><th>Obra (contrato)</th><th>Equipagem</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Conselheiro Lafaiete</td><td>R$ 39,5 mi</td><td>R$ 33,0 mi</td><td>R$ 33,0 mi</td><td>R$ 66,0 mi</td></tr>
+              <tr><td>Divinópolis</td><td>R$ 45,4 mi</td><td>R$ 39,5 mi</td><td>R$ 85,0 mi</td><td>R$ 124,5 mi</td></tr>
+              <tr><td>Governador Valadares</td><td>R$ 107,9 mi</td><td>R$ 89,9 mi</td><td>R$ 41,3 mi</td><td>R$ 131,1 mi</td></tr>
+              <tr><td>Sete Lagoas</td><td>R$ 101,8 mi</td><td>R$ 88,8 mi</td><td>R$ 76,9 mi</td><td>R$ 165,8 mi</td></tr>
+              <tr><td>Teófilo Otoni</td><td>R$ 130,8 mi</td><td>R$ 104,7 mi</td><td>R$ 145,3 mi</td><td>R$ 250,1 mi</td></tr>
+              <tr class="total"><td>Total</td><td>R$ 425,4 mi</td><td>R$ 355,9 mi</td><td>R$ 381,5 mi</td><td>R$ 737,5 mi</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Leitos por tipo -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="bed" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Leitos por tipo</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="tnum">
+            <thead>
+              <tr><th>Hospital</th><th>Internação</th><th>UTI</th><th>Pronto Atendimento</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Conselheiro Lafaiete</td><td>77</td><td>20</td><td>20</td><td>117</td></tr>
+              <tr><td>Divinópolis</td><td>121</td><td>55</td><td>20</td><td>196</td></tr>
+              <tr><td>Sete Lagoas</td><td>176</td><td>50</td><td>20</td><td>246</td></tr>
+              <tr><td>Governador Valadares</td><td>176</td><td>50</td><td>20</td><td>246</td></tr>
+              <tr><td>Teófilo Otoni</td><td>351</td><td>55</td><td>20</td><td>426</td></tr>
+              <tr class="total"><td>Total</td><td>901</td><td>230</td><td>100</td><td>1.231</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div>
+        <div class="flex items-center gap-3 pb-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Status · passe o mouse para o detalhe</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="tnum">
+            <thead><tr><th>Hospital</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Conselheiro Lafaiete</td>
+                <td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-black uppercase tracking-wider text-blue-500 cursor-help" data-tip="Contrato de concessão já assinado com o Instituto de Saúde HSVP e as atividades preparatórias estão em curso."><span class="w-2 h-2 rounded-full bg-blue-400"></span>Previsão: 2º Sem. 2026</span></td>
+              </tr>
+              <tr>
+                <td>Divinópolis</td>
+                <td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ses-green/10 border border-ses-green/20 text-[10px] font-black uppercase tracking-wider text-ses-green cursor-help" data-tip="Hospital em funcionamento parcial, conforme plano de escalonamento. Gestão da HU Brasil. Previsão de finalizar a abertura total em 2 anos."><span class="w-2 h-2 rounded-full bg-ses-green"></span>Em operação</span></td>
+              </tr>
+              <tr>
+                <td>Sete Lagoas</td>
+                <td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-black uppercase tracking-wider text-blue-500 cursor-help" data-tip="Hospital concedido ao Município. Encontra-se em curso licitação para que seja escolhida a entidade que fará a gestão. Recursos de equipagem já repassados."><span class="w-2 h-2 rounded-full bg-blue-400"></span>Previsão: 2º Sem. 2026</span></td>
+              </tr>
+              <tr>
+                <td>Governador Valadares</td>
+                <td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-black uppercase tracking-wider text-blue-500 cursor-help" data-tip="Licitação em andamento para definição da entidade que fará a gestão. Previsão de finalização nas próximas semanas."><span class="w-2 h-2 rounded-full bg-blue-400"></span>Previsão: 2º Sem. 2026</span></td>
+              </tr>
+              <tr>
+                <td>Teófilo Otoni</td>
+                <td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ses-green/10 border border-ses-green/20 text-[10px] font-black uppercase tracking-wider text-ses-green cursor-help" data-tip="Hospital em funcionamento parcial, conforme plano de escalonamento. Gestão da Associação Mario Penna. Previsão de finalizar a abertura total em 3 anos."><span class="w-2 h-2 rounded-full bg-ses-green"></span>Em operação</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RODAPÉ ================= -->
+    <div class="relative overflow-hidden rounded-[40px] bg-gradient-to-br from-ses-green to-[#4f7a24] p-8 shadow-md wave-tide">
+      <div class="wave-overlay"></div>
+      <div class="absolute -left-10 -bottom-16 w-48 h-48 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-[0.25em] mb-1">Secretaria de Estado de Saúde de Minas Gerais</p>
+          <p class="text-lg font-black text-white tracking-tight">Entregas e investimentos</p>
+        </div>
+        <button onclick="window.print()" class="no-print text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2 bg-white/15 backdrop-blur-md hover:bg-white hover:text-ses-green px-5 py-3 rounded-2xl border border-white/25 shadow-sm transition-all hover:-translate-y-0.5">
+          <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="global-tip"></div>
+
+<script>
+  lucide.createIcons();
+
+  // ---------- Balão de mouse-over (data-tip) ----------
+  (function () {
+    const tip = document.getElementById('global-tip');
+    let alvo = null;
+
+    function esconder() { tip.classList.remove('tip-on'); alvo = null; }
+
+    function posicionar(el) {
+      const r = el.getBoundingClientRect();
+      const t = tip.getBoundingClientRect();
+      let left = r.left + r.width / 2 - t.width / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - t.width - 8));
+      let top = r.top - t.height - 9;
+      tip.classList.remove('tip-below');
+      if (top < 8) { top = r.bottom + 9; tip.classList.add('tip-below'); }
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+      tip.style.setProperty('--tip-arrow', (r.left + r.width / 2 - left) + 'px');
+    }
+
+    document.addEventListener('mouseover', (e) => {
+      const el = e.target.closest && e.target.closest('[data-tip]');
+      if (!el || el === alvo) return;
+      alvo = el;
+      tip.textContent = el.getAttribute('data-tip');
+      tip.classList.add('tip-on');
+      posicionar(el);
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (!alvo) return;
+      const para = e.relatedTarget;
+      if (para && alvo.contains(para)) return;
+      esconder();
+    });
+
+    document.addEventListener('click', esconder);
+    window.addEventListener('scroll', esconder, true);
+  })();
+
+  // ---------- Pills de navegação ----------
+  (function () {
+    const links = [...document.querySelectorAll('a[href^="#"]')];
+    const ativa = 'bg-ses-green text-white border-ses-green shadow-md';
+    const inativa = 'bg-white text-slate-500 border-slate-200 hover:border-slate-300';
+    function marcar(alvo) {
+      links.forEach(l => {
+        const on = l.getAttribute('href') === alvo;
+        l.className = 'px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border shadow-sm ' + (on ? ativa : inativa);
+      });
+    }
+    links.forEach(l => l.addEventListener('click', () => marcar(l.getAttribute('href'))));
+
+    const secoes = [...document.querySelectorAll('section[id]')];
+    const io = new IntersectionObserver((entradas) => {
+      const visivel = entradas.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (visivel) marcar('#' + visivel.target.id);
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    secoes.forEach(s => io.observe(s));
+  })();
+</script>
+</body>
+</html>

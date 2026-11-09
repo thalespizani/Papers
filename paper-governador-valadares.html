@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governador Valadares — Entregas e Investimentos em Saúde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'ses-green': '#8dc63f',
+        'ses-lightgreen': '#b2d235',
+        'ses-blue': '#007fb6',
+        'ses-darkblue': '#005b8e',
+        'ses-lightblue': '#5ab0d8',
+        'ses-orange': '#f58220',
+        'ses-darkorange': '#d96c14',
+        'ses-yellow': '#fdb913'
+      },
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  body { background: #f4f7f9; font-family: 'Inter', system-ui, sans-serif; }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  .wave-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'><path fill='%23ffffff' fill-opacity='0.14' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,208C960,192,1056,160,1152,160C1248,160,1344,192,1392,208L1440,224L1440,320L0,320Z'></path></svg>");
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% 62%;
+  }
+  .bg-grid-white {
+    background-image: radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .fade-in { animation: fadeIn .45s ease-out both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  #global-tip {
+    position: fixed; z-index: 90; background: #1e293b; color: #fff;
+    font-size: 11px; line-height: 1.45; font-weight: 600;
+    padding: 7px 11px; border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.22);
+    max-width: min(340px, 100vw - 16px);
+    white-space: pre-line; overflow-wrap: anywhere;
+    opacity: 0; pointer-events: none; transition: opacity .12s ease;
+  }
+  #global-tip.tip-on { opacity: 1; }
+
+  .bar { height: 8px; border-radius: 9999px; background: linear-gradient(90deg, #b2d235, #8dc63f); }
+  .bar-track { background: #eef2f5; border-radius: 9999px; height: 8px; position: relative; overflow: hidden; }
+
+  @media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body class="text-slate-600">
+
+<div class="w-full max-w-[860px] mx-auto px-4 sm:px-5 py-5">
+  <div class="fade-in space-y-4">
+
+    <!-- ================= HERO ================= -->
+    <div class="relative overflow-hidden rounded-[40px] shadow-md bg-gradient-to-br from-ses-green to-[#4f7a24] p-5 sm:p-6">
+      <div class="wave-overlay"></div>
+      <div class="absolute inset-0 bg-grid-white opacity-60 pointer-events-none"></div>
+      <div class="absolute -right-16 -top-20 w-56 h-56 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-10 -bottom-16 w-40 h-40 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 flex items-center gap-4 min-w-0">
+        <div class="bg-white/20 backdrop-blur-md border border-white/25 text-white p-3 rounded-2xl shadow-inner shrink-0">
+          <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[9px] font-black text-white/70 uppercase tracking-[0.2em] mb-1 whitespace-nowrap">Secretaria de Estado de Saúde de Minas Gerais · SES-MG</p>
+          <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm leading-tight whitespace-nowrap">Entregas e Investimentos em Saúde</h1>
+          <p class="text-lg sm:text-xl font-black text-white/90 tracking-tight leading-tight mt-0.5 whitespace-nowrap">Governador Valadares</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= HOSPITAL REGIONAL ================= -->
+    <section class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-8 space-y-5">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md shrink-0">
+            <i data-lucide="building-2" class="w-6 h-6 text-white"></i>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-ses-darkblue tracking-tight leading-tight">Hospital Regional de Governador Valadares</h2>
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-black uppercase tracking-wider text-blue-500 cursor-help shrink-0" data-tip="Licitação em andamento para definição da entidade que fará a gestão. Previsão de finalização nas próximas semanas.">
+          <span class="w-2 h-2 rounded-full bg-blue-400"></span>Previsão: 2º Sem. 2026
+        </span>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-3 pb-3">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="wallet" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Investimento e execução financeira</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Previsto</p>
+            <p class="text-xl font-black text-slate-800 tnum tracking-tight">R$ 107,9 <span class="text-xs text-slate-400">mi</span></p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Obra (contrato)</p>
+            <p class="text-xl font-black text-slate-800 tnum tracking-tight">R$ 89,9 <span class="text-xs text-slate-400">mi</span></p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Equipagem</p>
+            <p class="text-xl font-black text-slate-800 tnum tracking-tight">R$ 41,3 <span class="text-xs text-slate-400">mi</span></p>
+          </div>
+          <div class="relative overflow-hidden bg-gradient-to-br from-ses-green to-[#4f7a24] rounded-2xl p-4 shadow-sm">
+            <div class="absolute -right-4 -top-6 w-20 h-20 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <p class="text-[9px] font-black text-white/70 uppercase tracking-widest mb-1">Total</p>
+            <p class="text-xl font-black text-white tnum tracking-tight">R$ 131,1 <span class="text-xs text-white/70">mi</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-3 pb-3">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="bed" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Leitos por tipo</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Internação</p>
+            <p class="text-xl font-black text-slate-800 tnum tracking-tight">176</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">UTI</p>
+            <p class="text-xl font-black text-slate-800 tnum tracking-tight">50</p>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Pronto Atendimento</p>
+            <p class="text-xl font-black text-slate-800 tnum tracking-tight">20</p>
+          </div>
+          <div class="relative overflow-hidden bg-gradient-to-br from-ses-green to-[#4f7a24] rounded-2xl p-4 shadow-sm">
+            <div class="absolute -right-4 -top-6 w-20 h-20 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <p class="text-[9px] font-black text-white/70 uppercase tracking-widest mb-1">Total de leitos</p>
+            <p class="text-xl font-black text-white tnum tracking-tight">246</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PANORAMA DO INVESTIMENTO ================= -->
+    <section class="bg-white rounded-[40px] border border-slate-200 shadow-sm p-6 sm:p-8 space-y-5">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-ses-green to-[#4f7a24] flex items-center justify-center shadow-md shrink-0">
+          <i data-lucide="landmark" class="w-6 h-6 text-white"></i>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black text-ses-darkblue tracking-tight">Panorama do Investimento</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="sm:col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-ses-green to-[#4f7a24] p-6 shadow-md">
+          <div class="absolute -right-8 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          <p class="text-[10px] font-black text-white/70 uppercase tracking-[0.25em] mb-2">Total repassado 2019–2026</p>
+          <p class="text-4xl font-black text-white tnum tracking-tight">R$ 598,2 <span class="text-lg text-white/70">mi</span></p>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Opera Mais Minas</p>
+          <p class="text-3xl font-black text-slate-800 tnum tracking-tight">R$ 23,6 <span class="text-base text-slate-400">mi</span></p>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-3 pb-3">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Comparativo entre governos — recursos pagos ao município</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="flex items-center gap-4 mb-3">
+          <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-500"><span class="w-2 h-2 rounded-full bg-red-600 shrink-0"></span>Valor investido (nominal)</span>
+          <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-500"><span class="w-2 h-2 rounded-full bg-rose-300 shrink-0"></span>Correção monetária (IPCA-E)</span>
+        </div>
+
+        <div class="space-y-3">
+          <!-- APS -->
+          <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <p class="text-sm font-black text-slate-800">Atenção Primária à Saúde</p>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-full bg-red-600 text-white text-[10px] font-black">24,3x sem correção</span>
+                <span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-600 text-[10px] font-black">17,9x com correção</span>
+              </div>
+            </div>
+            <div class="space-y-2.5">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1">
+                  <span>Governo atual (2022–2025)</span><span class="tnum font-black text-slate-800">R$ 44,3 mi</span>
+                </div>
+                <div class="bar-track"><div class="bar" style="width:100%"></div></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1">
+                  <span>Governo anterior (2015–2018)</span><span class="tnum font-black text-slate-800">R$ 2,5 mi</span>
+                </div>
+                <div class="bar-track">
+                  <div class="absolute inset-y-0 left-0 rounded-full" style="width:7.7%; background:#fecdd3;"></div>
+                  <div class="absolute inset-y-0 left-0 rounded-full" style="width:5.6%; background:#dc2626;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Valora -->
+          <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <p class="text-sm font-black text-slate-800">Valora Minas vs. Pró-Hosp</p>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-full bg-red-600 text-white text-[10px] font-black">5,4x sem correção</span>
+                <span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-600 text-[10px] font-black">4,0x com correção</span>
+              </div>
+            </div>
+            <div class="space-y-2.5">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1">
+                  <span>Governo atual (2022–2025)</span><span class="tnum font-black text-slate-800">R$ 125,1 mi</span>
+                </div>
+                <div class="bar-track"><div class="bar" style="width:100%"></div></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1">
+                  <span>Governo anterior (2015–2018)</span><span class="tnum font-black text-slate-800">R$ 31,4 mi</span>
+                </div>
+                <div class="bar-track">
+                  <div class="absolute inset-y-0 left-0 rounded-full" style="width:34.2%; background:#fecdd3;"></div>
+                  <div class="absolute inset-y-0 left-0 rounded-full" style="width:25.1%; background:#dc2626;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-3 pb-3">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i data-lucide="scale" class="w-4 h-4"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest">Acordo FES — dívida do Estado com o município</span>
+          </div>
+          <span class="flex-1 h-px bg-slate-200"></span>
+        </div>
+        <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100">
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <p class="text-xs font-black text-slate-700">Já pago pelo Estado: <span class="text-ses-green">R$ 106,3 mi</span></p>
+            <p class="text-xs font-black text-slate-500">Dívida total: R$ 153,1 mi</p>
+          </div>
+          <div class="bar-track"><div class="bar" style="width:69.5%"></div></div>
+          <p class="text-right text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">69,5% pago</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 bg-ses-green/10 border border-ses-green/20 rounded-2xl p-4">
+        <i data-lucide="siren" class="w-5 h-5 text-ses-green shrink-0 mt-0.5"></i>
+        <p class="text-sm font-bold text-slate-700 leading-relaxed">Governador Valadares decretou emergência em saúde — o Estado está processando o adiantamento do valor anual do acordo para o município.</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+  const tip = document.createElement('div');
+  tip.id = 'global-tip';
+  document.body.appendChild(tip);
+  document.querySelectorAll('[data-tip]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      tip.textContent = el.getAttribute('data-tip');
+      tip.classList.add('tip-on');
+      const r = el.getBoundingClientRect();
+      tip.style.left = (r.left + r.width / 2) + 'px';
+      tip.style.top = (r.top - 8) + 'px';
+      tip.style.transform = 'translate(-50%, -100%)';
+    });
+    el.addEventListener('mouseleave', () => tip.classList.remove('tip-on'));
+  });
+</script>
+</body>
+</html>
